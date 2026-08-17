@@ -1,10 +1,12 @@
 ---
-titulo: Jornada e controle de ponto: as regras que sustentam a defesa da empresa
-descricao: Quem é obrigado a controlar ponto, como funcionam horas extras, intervalos e banco de horas, e por que o registro mal feito costuma custar mais caro do que a hora extra em si.
-trilha: empresa
-assunto: Contratação
+slug: "jornada-e-controle-de-ponto"
+titulo: "Jornada e controle de ponto: as regras que sustentam a defesa da empresa"
+descricao: "Quem é obrigado a controlar ponto, como funcionam horas extras, intervalos e banco de horas, e por que o registro mal feito costuma custar mais caro do que a hora extra em si."
+trilha: "empresa"
+assunto: "Contratação"
 data: 2026-07-28
 ordem: 2
+destaque: "nao"
 ---
 
 Jornada é, de longe, o tema que mais aparece em reclamações trabalhistas. E o motivo raramente é a empresa querer sonegar hora extra: é não conseguir provar a jornada efetivamente cumprida.

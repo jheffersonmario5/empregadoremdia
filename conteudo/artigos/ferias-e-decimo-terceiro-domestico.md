@@ -1,10 +1,12 @@
 ---
-titulo: Férias, 13º e benefícios do empregado doméstico
-descricao: Trinta dias de férias com um terço, 13º em duas parcelas, vale-transporte e as regras de fracionamento e de abono. O calendário anual de quem emprega em casa.
-trilha: domestico
-assunto: Durante o contrato
+slug: "ferias-e-decimo-terceiro-domestico"
+titulo: "Férias, 13º e benefícios do empregado doméstico"
+descricao: "Trinta dias de férias com um terço, 13º em duas parcelas, vale-transporte e as regras de fracionamento e de abono. O calendário anual de quem emprega em casa."
+trilha: "domestico"
+assunto: "Durante o contrato"
 data: 2026-07-25
 ordem: 4
+destaque: "nao"
 ---
 
 Depois do salário mensal e da guia DAE, o que estrutura o ano do empregador doméstico são as férias e o 13º salário. Ambos têm regra própria e prazo — e ambos costumam ser tratados de modo informal, o que gera acerto errado no fim do contrato.

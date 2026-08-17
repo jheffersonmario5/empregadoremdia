@@ -1,10 +1,12 @@
 ---
-titulo: Rescisão: prazos, verbas e os erros que geram multa automática
-descricao: O prazo de pagamento das verbas rescisórias é de 10 dias e a multa por atraso independe de discussão sobre valores. Veja o que muda em cada modalidade de desligamento.
-trilha: empresa
-assunto: Desligamento
+slug: "rescisao-prazos-e-verbas"
+titulo: "Rescisão: prazos, verbas e os erros que geram multa automática"
+descricao: "O prazo de pagamento das verbas rescisórias é de 10 dias e a multa por atraso independe de discussão sobre valores. Veja o que muda em cada modalidade de desligamento."
+trilha: "empresa"
+assunto: "Desligamento"
 data: 2026-07-20
 ordem: 5
+destaque: "nao"
 ---
 
 Poucos momentos do contrato de trabalho são tão concentrados em prazo quanto a rescisão. Errar a data de pagamento gera consequência independentemente de o cálculo estar correto.

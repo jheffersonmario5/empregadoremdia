@@ -1,10 +1,12 @@
 ---
-titulo: Prevenção ao assédio: o que a Lei 14.457/2022 exige de quem tem CIPA
-descricao: A lei renomeou a CIPA e criou quatro obrigações concretas de prevenção ao assédio sexual e a outras formas de violência no trabalho. Veja quais são e a quem se aplicam.
-trilha: empresa
-assunto: Saúde e segurança
+slug: "assedio-cipa-lei-14457"
+titulo: "Prevenção ao assédio: o que a Lei 14.457/2022 exige de quem tem CIPA"
+descricao: "A lei renomeou a CIPA e criou quatro obrigações concretas de prevenção ao assédio sexual e a outras formas de violência no trabalho. Veja quais são e a quem se aplicam."
+trilha: "empresa"
+assunto: "Saúde e segurança"
 data: 2026-08-10
 ordem: 4
+destaque: "nao"
 ---
 
 A Lei nº 14.457/2022 fez duas coisas ao mesmo tempo: mudou o nome da CIPA e passou a exigir medidas concretas de prevenção ao assédio dentro das empresas.

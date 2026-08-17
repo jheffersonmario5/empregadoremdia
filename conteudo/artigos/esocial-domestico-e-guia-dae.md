@@ -1,11 +1,12 @@
 ---
-titulo: eSocial Doméstico e guia DAE: o que você paga além do salário
-descricao: A guia DAE reúne INSS, FGTS, seguro de acidente e a indenização compensatória em um único documento. Veja a composição de cada percentual e o prazo mensal.
-trilha: domestico
-assunto: Durante o contrato
+slug: "esocial-domestico-e-guia-dae"
+titulo: "eSocial Doméstico e guia DAE: o que você paga além do salário"
+descricao: "A guia DAE reúne INSS, FGTS, seguro de acidente e a indenização compensatória em um único documento. Veja a composição de cada percentual e o prazo mensal."
+trilha: "domestico"
+assunto: "Durante o contrato"
 data: 2026-08-12
 ordem: 2
-destaque: sim
+destaque: "sim"
 ---
 
 Quem emprega em casa recolhe tudo por meio de um documento só: o **DAE — Documento de Arrecadação do eSocial**. Ele é gerado no portal do eSocial Doméstico depois do fechamento da folha do mês e reúne, em uma única guia, as contribuições do empregador e o que é retido do empregado.

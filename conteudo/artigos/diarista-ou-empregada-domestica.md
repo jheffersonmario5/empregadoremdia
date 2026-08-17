@@ -1,11 +1,12 @@
 ---
-titulo: Diarista ou empregada doméstica? O critério que define tudo
-descricao: A diferença não está no nome do combinado nem na forma de pagamento. Está na frequência e na presença dos elementos do vínculo — e ela decide todas as obrigações seguintes.
-trilha: domestico
-assunto: Antes de contratar
+slug: "diarista-ou-empregada-domestica"
+titulo: "Diarista ou empregada doméstica? O critério que define tudo"
+descricao: "A diferença não está no nome do combinado nem na forma de pagamento. Está na frequência e na presença dos elementos do vínculo — e ela decide todas as obrigações seguintes."
+trilha: "domestico"
+assunto: "Antes de contratar"
 data: 2026-08-17
 ordem: 1
-destaque: sim
+destaque: "sim"
 ---
 
 Essa é a primeira pergunta que um empregador doméstico precisa responder, porque dela dependem todas as outras: registro, eSocial, FGTS, férias, 13º e rescisão.

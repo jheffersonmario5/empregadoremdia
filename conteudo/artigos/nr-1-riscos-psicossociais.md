@@ -1,11 +1,12 @@
 ---
-titulo: NR-1 e riscos psicossociais: o que mudou para a sua empresa
-descricao: Desde maio de 2026, os riscos psicossociais passaram a ser fiscalizados dentro do gerenciamento de riscos ocupacionais. Veja o que a norma exige e por onde começar.
-trilha: empresa
-assunto: Saúde e segurança
+slug: "nr-1-riscos-psicossociais"
+titulo: "NR-1 e riscos psicossociais: o que mudou para a sua empresa"
+descricao: "Desde maio de 2026, os riscos psicossociais passaram a ser fiscalizados dentro do gerenciamento de riscos ocupacionais. Veja o que a norma exige e por onde começar."
+trilha: "empresa"
+assunto: "Saúde e segurança"
 data: 2026-08-17
 ordem: 3
-destaque: sim
+destaque: "sim"
 ---
 
 A Norma Regulamentadora nº 1 sempre tratou das disposições gerais de segurança e saúde no trabalho. O que mudou é o alcance: o gerenciamento de riscos ocupacionais passou a abranger expressamente os **riscos psicossociais** — aqueles ligados à organização do trabalho, e não a um agente físico, químico ou biológico.

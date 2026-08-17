@@ -1,10 +1,12 @@
 ---
-titulo: Admissão: o que precisa estar pronto antes do primeiro dia
-descricao: Registro, exame médico, contrato e eSocial têm momento certo para acontecer — e boa parte deles é anterior ao início do trabalho. Veja a sequência correta.
-trilha: empresa
-assunto: Contratação
+slug: "admissao-o-que-fazer-antes"
+titulo: "Admissão: o que precisa estar pronto antes do primeiro dia"
+descricao: "Registro, exame médico, contrato e eSocial têm momento certo para acontecer — e boa parte deles é anterior ao início do trabalho. Veja a sequência correta."
+trilha: "empresa"
+assunto: "Contratação"
 data: 2026-08-05
 ordem: 1
+destaque: "nao"
 ---
 
 Contratar não começa no primeiro dia de trabalho. Uma parte relevante das obrigações do empregador vence **antes** de o empregado assumir a função, e é justamente aí que se concentram as falhas mais caras.

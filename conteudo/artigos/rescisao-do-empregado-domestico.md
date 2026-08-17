@@ -1,10 +1,12 @@
 ---
-titulo: Fim do contrato doméstico: aviso prévio, verbas e o que acontece com o FGTS
-descricao: O que muda entre dispensa, pedido de demissão e justa causa no trabalho doméstico, incluindo o destino da indenização compensatória de 3,2% depositada mês a mês.
-trilha: domestico
-assunto: Fim do contrato
+slug: "rescisao-do-empregado-domestico"
+titulo: "Fim do contrato doméstico: aviso prévio, verbas e o que acontece com o FGTS"
+descricao: "O que muda entre dispensa, pedido de demissão e justa causa no trabalho doméstico, incluindo o destino da indenização compensatória de 3,2% depositada mês a mês."
+trilha: "domestico"
+assunto: "Fim do contrato"
 data: 2026-07-15
 ordem: 5
+destaque: "nao"
 ---
 
 O acerto de contas do trabalho doméstico segue uma lógica própria em um ponto central: a indenização compensatória de 3,2% já foi depositada ao longo de todo o contrato. O que se decide no fim é para quem ela vai.

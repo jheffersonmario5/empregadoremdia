@@ -1,10 +1,12 @@
 ---
-titulo: Jornada do empregado doméstico: horas extras, intervalos e 12x36
-descricao: A LC 150/2015 trouxe regras próprias de jornada para o trabalho doméstico, inclusive controle de horário obrigatório. Veja limites, adicionais e como formalizar cada regime.
-trilha: domestico
-assunto: Durante o contrato
+slug: "jornada-do-empregado-domestico"
+titulo: "Jornada do empregado doméstico: horas extras, intervalos e 12x36"
+descricao: "A LC 150/2015 trouxe regras próprias de jornada para o trabalho doméstico, inclusive controle de horário obrigatório. Veja limites, adicionais e como formalizar cada regime."
+trilha: "domestico"
+assunto: "Durante o contrato"
 data: 2026-08-03
 ordem: 3
+destaque: "nao"
 ---
 
 Antes de 2015, jornada no trabalho doméstico era assunto sem regra clara. A Lei Complementar nº 150/2015 mudou isso: hoje há limite diário, limite semanal, adicional de hora extra e obrigação de registrar o horário.
