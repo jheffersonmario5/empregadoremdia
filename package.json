@@ -1,0 +1,10 @@
+{
+  "name": "empregadoremdia",
+  "private": true,
+  "type": "module",
+  "description": "Gerador estático do site Empregador em Dia. Sem dependências: só declara que os .js do projeto são módulos ES, para que o build.mjs possa importar assets/markdown.js — o mesmo arquivo que o navegador carrega no painel /publicar/.",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "node build.mjs --serve"
+  }
+}
