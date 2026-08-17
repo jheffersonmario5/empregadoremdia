@@ -14,6 +14,13 @@
 
   "atendimento": "Atendimento mediante agendamento prévio.",
 
+  "_github": "Repositório onde o site mora. O painel /publicar/ usa estes dados para gravar os artigos.",
+  "github": {
+    "usuario": "jheffersonmario5",
+    "repositorio": "empregadoremdia",
+    "ramo": "main"
+  },
+
   "advogado": {
     "nome": "Jhefferson Mário de Oliveira",
     "oab": "OAB/DF 82.715 e OAB/SP 535.570"

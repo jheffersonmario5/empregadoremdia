@@ -82,16 +82,48 @@ O plano gratuito tem limite mensal de envios. Se o volume crescer, dá para troc
 
 ---
 
-## 5. Publicar um artigo novo
+## 5. Publicar um artigo novo — pelo próprio site
 
-Crie um arquivo `.md` dentro de `conteudo/artigos/`. **O nome do arquivo vira o endereço da página** — use nomes curtos, em minúsculas e com hífens.
+Abra **[empregadoremdia.com.br/publicar/](https://empregadoremdia.com.br/publicar/)**. Essa página não aparece no menu nem no Google (`noindex`), mas fica linkada no rodapé.
+
+### 5.1 Na primeira vez: gerar o token
+
+O painel escreve direto no repositório, e para isso precisa de uma autorização sua no GitHub.
+
+1. Abra [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new).
+2. Em **Repository access**, marque *Only select repositories* → `empregadoremdia`.
+3. Em **Permissions → Repository permissions**, coloque **Contents** em *Read and write*.
+4. Escolha a validade, gere e copie o token (começa com `github_pat_`).
+5. Cole no campo do painel e clique em **Conectar**.
+
+O token fica guardado só no navegador que você usou — nenhum outro servidor participa, o navegador fala direto com o GitHub. Marque "continuar conectado" apenas em computador seu; em máquina compartilhada, desmarque e ele some quando a aba fechar.
+
+> Quando o token vencer, o painel avisa e pede um novo. Nada se perde.
+
+### 5.2 No dia a dia
+
+- **Novo artigo**: preenche os campos, escreve o texto e clica em **Publicar no site**.
+- **Editar**: clica em *Editar* na lista, altera e publica de novo.
+- **Excluir**: dentro do editor, botão *Excluir artigo*.
+
+A pré-visualização ao lado usa o mesmo renderizador que gera o site — o que você vê é o que vai ao ar. O endereço da página é sugerido a partir do título, mas pode ser trocado; se você mudar o endereço de um artigo já publicado, o painel avisa que o link antigo vai quebrar.
+
+Depois de publicar, o GitHub reconstrói o site sozinho. Leva de um a dois minutos, e o painel mostra o link para acompanhar.
+
+Se um rascunho ficar pela metade, ele é guardado no navegador e o painel oferece recuperá-lo na próxima vez.
+
+---
+
+## 5-B. Publicar um artigo pelo arquivo (alternativa)
+
+Também dá para criar o `.md` à mão dentro de `conteudo/artigos/`. **O nome do arquivo vira o endereço da página** — use nomes curtos, em minúsculas e com hífens.
 
 Exemplo: `banco-de-horas.md` → `empregadoremdia.com.br/artigos/banco-de-horas/`
 
 ```markdown
 ---
-titulo: Banco de horas: quando o acordo é válido
-descricao: Uma frase de resumo. Aparece no Google e nos cartões do site.
+titulo: "Banco de horas: quando o acordo é válido"
+descricao: "Uma frase de resumo. Aparece no Google e nos cartões do site."
 trilha: empresa
 assunto: Contratação
 data: 2026-09-10
@@ -139,13 +171,21 @@ Para alertar sobre um erro comum.
 ::: prazo Título
 Para destacar uma data ou prazo.
 :::
+
+::: dica Título
+Para uma orientação prática.
+:::
 ```
+
+No painel `/publicar/` essas quatro caixas estão na barra de ferramentas, é só clicar.
 
 ### O que o Markdown aceita
 
-Títulos `##` e `###`, negrito `**assim**`, itálico `*assim*`, links `[texto](url)`, listas com `-` ou `1.`, citações com `>`, tabelas com `|` e a linha separadora `---`.
+Títulos `##` e `###`, negrito `**assim**`, itálico `*assim*`, links `[texto](url)`, imagens `![descrição](url)`, listas com `-` ou `1.`, citações com `>`, tabelas com `|` e a linha separadora `---`.
 
 Os títulos `##` viram automaticamente o índice "Nesta página" quando houver três ou mais.
+
+> **Dois-pontos no cabeçalho.** Se um `titulo` ou `descricao` tiver `:` ou aspas, ponha o valor **entre aspas**. O gerador aceita sem, mas avisa no terminal — e um editor de YAML não conseguiria abrir o arquivo. O painel `/publicar/` já faz isso sozinho.
 
 ---
 
@@ -165,14 +205,18 @@ Se preferir, dá para pular isso: basta enviar o arquivo `.md` pelo GitHub e con
 ## 7. Estrutura das pastas
 
 ```
-conteudo/site.json        configuração geral (contato, domínio, identificação)
+conteudo/site.json        configuração geral (contato, domínio, repositório, identificação)
 conteudo/artigos/*.md     os artigos — um arquivo por texto
-assets/estilo.css         aparência do site
-assets/site.js            menu em telas pequenas
+assets/estilo.css         aparência do site (claro e escuro)
+assets/markdown.js        conversor de Markdown — usado pelo gerador E pelo painel
+assets/site.js            menu, tema, busca, sumário e barra de progresso
+assets/publicar.js        o painel /publicar/
 build.mjs                 gerador do site
 .github/workflows/        publicação automática no GitHub Pages
 _site/                    resultado gerado (não editar, não enviar)
 ```
+
+`assets/markdown.js` é o único lugar onde as regras de Markdown existem. O gerador o importa no Node e o painel o importa no navegador — por isso a pré-visualização não pode divergir do resultado final.
 
 ---
 

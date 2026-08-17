@@ -1,0 +1,7 @@
+# Resultado gerado pelo build.mjs — o GitHub Actions reconstrói a cada publicação.
+_site/
+
+# Lixo de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
