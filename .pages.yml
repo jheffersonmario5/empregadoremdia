@@ -1,0 +1,136 @@
+media:
+  input: assets
+  output: /assets
+
+content:
+  - name: artigos
+    label: Artigos
+    type: collection
+    path: conteudo/artigos
+    format: yaml-frontmatter
+    filename: '{primary}.md'
+    view:
+      primary: slug
+      fields:
+        - titulo
+        - trilha
+        - assunto
+        - data
+      sort:
+        - data
+        - ordem
+      order: desc
+    fields:
+      - name: slug
+        label: Endereço da página
+        description: 'Só minúsculas e hífens, sem acento. Ex.: banco-de-horas'
+        type: string
+        required: true
+
+      - name: titulo
+        label: Título do artigo
+        type: string
+        required: true
+
+      - name: descricao
+        label: Resumo
+        description: Uma frase. É o que aparece no Google e no cartão do artigo.
+        type: text
+        required: true
+
+      - name: trilha
+        label: Trilha
+        type: select
+        required: true
+        options:
+          values:
+            - value: empresa
+              label: Empresa (CLT)
+            - value: domestico
+              label: Empregador doméstico
+
+      - name: assunto
+        label: Assunto
+        description: Agrupa o artigo dentro da trilha.
+        type: select
+        options:
+          creatable: true
+          values:
+            - Contratação
+            - Saúde e segurança
+            - Desligamento
+            - Antes de contratar
+            - Durante o contrato
+            - Fim do contrato
+
+      - name: data
+        label: Data de atualização
+        type: date
+        options:
+          format: yyyy-MM-dd
+
+      - name: ordem
+        label: Ordem dentro da trilha
+        description: Número menor aparece antes.
+        type: number
+        default: 9
+
+      - name: destaque
+        label: Destacar em "Em pauta agora" na página inicial
+        type: select
+        default: nao
+        options:
+          values:
+            - value: sim
+              label: Sim
+            - value: nao
+              label: Não
+
+      - name: body
+        label: Texto do artigo
+        type: text
+
+  - name: configuracoes
+    label: Configurações do site
+    type: file
+    path: conteudo/site.json
+    fields:
+      - name: dominio
+        label: Domínio
+        type: string
+      - name: url
+        label: Endereço completo
+        type: string
+      - name: whatsapp
+        label: WhatsApp
+        description: 'Código do país + DDD + número, só dígitos.'
+        type: string
+      - name: email
+        label: E-mail de contato
+        type: string
+      - name: formularioEndpoint
+        label: Endereço do Formspree
+        type: string
+      - name: atendimento
+        label: Observação sobre atendimento
+        type: string
+      - name: advogado
+        label: Advogado responsável
+        type: object
+        fields:
+          - name: nome
+            label: Nome
+            type: string
+          - name: oab
+            label: Inscrição na OAB
+            type: string
+      - name: advogadaParceira
+        label: Advogada parceira
+        type: object
+        fields:
+          - name: nome
+            label: Nome
+            type: string
+          - name: oab
+            label: Inscrição na OAB
+            type: string
