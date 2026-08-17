@@ -1,0 +1,26 @@
+{
+  "_leia": "Este é o único arquivo de configuração do site. Altere aqui e rode 'node build.mjs'.",
+
+  "dominio": "empregadoremdia.com.br",
+  "url": "https://empregadoremdia.com.br",
+
+  "_whatsapp": "Número com código do país e DDD, só dígitos. Ex.: 5561991234567",
+  "whatsapp": "5561991880398",
+
+  "email": "jheffersonmario6@gmail.com",
+
+  "_formularioEndpoint": "AJUSTE: crie um formulário gratuito em formspree.io e cole aqui o endereço (ex.: https://formspree.io/f/xxxxxxx). Enquanto estiver vazio, o formulário aparece desativado.",
+  "formularioEndpoint": "",
+
+  "atendimento": "Atendimento mediante agendamento prévio.",
+
+  "advogado": {
+    "nome": "Jhefferson Mário de Oliveira",
+    "oab": "OAB/DF 82.715 e OAB/SP 535.570"
+  },
+
+  "advogadaParceira": {
+    "nome": "Edineide Pinto da Cruz",
+    "oab": "OAB/DF 41.410 e OAB/GO 40.081-A"
+  }
+}
