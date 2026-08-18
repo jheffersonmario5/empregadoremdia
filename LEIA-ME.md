@@ -71,6 +71,38 @@ Depois, no GitHub: **Settings → Pages → Custom domain**, digite `empregadore
 
 ---
 
+## 3-B. Trancar a área de publicação (Cloudflare Access)
+
+O site é estático: o GitHub Pages só entrega arquivos, não roda código do lado do servidor. Por isso **nenhuma senha escrita dentro deste repositório seria uma tranca de verdade** — ela chegaria ao visitante junto com a página, legível no navegador. Quem controla o acesso à página precisa estar *na frente* dela.
+
+A Cloudflare faz esse papel de graça: o domínio passa a resolver por ela, e a regra do Access exige um código enviado ao seu e-mail antes de deixar a requisição chegar ao GitHub Pages.
+
+### 3-B.1 Colocar o domínio na Cloudflare
+
+1. Crie uma conta em [dash.cloudflare.com](https://dash.cloudflare.com) e escolha **Add a site** → `empregadoremdia.com.br` → plano **Free**.
+2. A Cloudflare importa os registros DNS existentes. **Confira** se os quatro `A` do GitHub Pages e o `CNAME` do `www` vieram junto, e deixe todos com a **nuvem laranja** (*Proxied*) — sem o proxy, o Access não tem como interceptar nada.
+3. Ela mostrará **dois servidores de nomes** (algo como `xxx.ns.cloudflare.com`). Copie os dois.
+4. No Registro.br, no domínio, troque de "usar servidores DNS do Registro.br" para **servidores DNS próprios** e informe os dois endereços da Cloudflare. A troca leva de minutos a algumas horas.
+5. Em **SSL/TLS → Overview**, escolha **Full**. Deixar em *Flexible* cria laço infinito de redirecionamento com o GitHub Pages — é o erro mais comum nessa combinação.
+
+### 3-B.2 Criar a regra de acesso
+
+1. No painel da Cloudflare, vá em **Zero Trust** → na primeira vez ele pede para escolher um nome de equipe e o plano **Free** (até 50 pessoas, sem cartão).
+2. **Access → Applications → Add an application → Self-hosted**.
+3. Em *Application domain*, informe o domínio `empregadoremdia.com.br` com o caminho `publicar` — assim só o painel fica trancado e o site continua aberto ao público.
+4. Em *Policies*, crie uma política **Allow** com a regra **Emails** → o seu endereço de e-mail.
+5. Em *Login methods*, deixe ligado o **One-time PIN**. É ele que dispensa criar senha: a Cloudflare manda um código ao seu e-mail a cada novo acesso.
+
+Feito isso, abrir `/publicar/` passa a pedir o código antes de mostrar qualquer coisa. O token do GitHub continua sendo exigido depois — são duas trancas em série, e é assim mesmo que deve ser: a Cloudflare diz *quem entra na sala*, o token diz *o que pode ser gravado*.
+
+### 3-B.3 O que essa tranca não cobre
+
+- **O endereço do GitHub Pages continua existindo.** Como há domínio próprio configurado, `jheffersonmario5.github.io/empregadoremdia/` responde com um redirecionamento para o domínio — e aí a Cloudflare pega. Mas se o *Custom domain* for removido nas configurações do Pages, esse caminho volta a servir o conteúdo direto, por fora do Access. Não mexa nessa opção.
+- **O repositório é público.** O código do painel (`assets/publicar.js`) pode ser lido por qualquer pessoa no GitHub. Isso não é falha: nada ali funciona sem o seu token. Mas não escreva segredo nenhum nesses arquivos.
+- **A tranca é do caminho `/publicar/`.** Se um dia outra página administrativa for criada em endereço diferente, ela precisa ser incluída na regra.
+
+---
+
 ## 4. Ativar o formulário de contato
 
 1. Crie uma conta gratuita em [formspree.io](https://formspree.io).
@@ -99,6 +131,14 @@ O painel escreve direto no repositório, e para isso precisa de uma autorizaçã
 O token fica guardado só no navegador que você usou — nenhum outro servidor participa, o navegador fala direto com o GitHub. Marque "continuar conectado" apenas em computador seu; em máquina compartilhada, desmarque e ele some quando a aba fechar.
 
 > Quando o token vencer, o painel avisa e pede um novo. Nada se perde.
+
+O painel recusa três situações, antes de deixar entrar:
+
+- **token de outra conta do GitHub** — só a conta dona do repositório é aceita;
+- **token sem permissão de gravação** — recusado na porta, e não na hora de publicar o artigo já escrito;
+- **sessão parada por mais de 30 minutos** — o token é apagado do navegador e é preciso conectar de novo. O prazo se renova sozinho enquanto você usa a página.
+
+Sair do painel apaga também o rascunho guardado no navegador.
 
 ### 5.2 No dia a dia
 

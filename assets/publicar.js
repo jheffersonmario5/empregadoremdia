@@ -103,16 +103,56 @@ function dizer(alvo, texto, tipo = '') {
   alvo.className = 'painel__estado' + (tipo ? ` painel__estado--${tipo}` : '');
 }
 
+/**
+ * O token guardado vale por tempo limitado. Um token do GitHub com permissão de
+ * escrita é uma chave do repositório: deixá-lo em localStorage sem prazo
+ * significa que qualquer pessoa que sente depois nesta máquina publica no site.
+ * A validade se renova a cada uso, então quem está trabalhando não é
+ * interrompido — só expira mesmo quem parou.
+ */
+const VALIDADE_MS = 30 * 60 * 1000;
+
 function guardarToken(valor, persistir) {
+  const pacote = JSON.stringify({ t: valor, expira: Date.now() + VALIDADE_MS });
   try {
-    (persistir ? localStorage : sessionStorage).setItem(CHAVE_TOKEN, valor);
+    (persistir ? localStorage : sessionStorage).setItem(CHAVE_TOKEN, pacote);
   } catch (e) { /* navegador sem armazenamento */ }
 }
 
 function lerTokenGuardado() {
   try {
-    return localStorage.getItem(CHAVE_TOKEN) || sessionStorage.getItem(CHAVE_TOKEN) || '';
+    const bruto = localStorage.getItem(CHAVE_TOKEN) || sessionStorage.getItem(CHAVE_TOKEN);
+    if (!bruto) return '';
+
+    let pacote = null;
+    try { pacote = JSON.parse(bruto); } catch (e) { pacote = null; }
+
+    // Formato antigo (token cru, sem prazo) não é aceito: apaga e pede de novo.
+    if (!pacote || typeof pacote.t !== 'string' || typeof pacote.expira !== 'number') {
+      apagarToken();
+      return '';
+    }
+
+    if (Date.now() > pacote.expira) {
+      apagarToken();
+      return '';
+    }
+    return pacote.t;
   } catch (e) { return ''; }
+}
+
+/** Estende o prazo do token já guardado, sem mudar de lugar de armazenamento. */
+function renovarValidade() {
+  try {
+    for (const area of [localStorage, sessionStorage]) {
+      const bruto = area.getItem(CHAVE_TOKEN);
+      if (!bruto) continue;
+      const pacote = JSON.parse(bruto);
+      if (!pacote || typeof pacote.t !== 'string') continue;
+      pacote.expira = Date.now() + VALIDADE_MS;
+      area.setItem(CHAVE_TOKEN, JSON.stringify(pacote));
+    }
+  } catch (e) { /* sem armazenamento ou conteúdo inválido */ }
 }
 
 function apagarToken() {
@@ -207,9 +247,33 @@ async function conectar(valor, persistir) {
 
   try {
     const usuario = await gh('/user');
-    await gh(`/repos/${CFG.usuario}/${CFG.repositorio}`);
+
+    // O painel é de uma conta só. Sem esta checagem, qualquer token válido do
+    // GitHub — de qualquer pessoa — abre a tela de trabalho; a gravação até
+    // falharia depois, mas o conteúdo já teria sido listado e lido.
+    const dono = String(CFG.usuario || '').toLowerCase();
+    if (String(usuario.login || '').toLowerCase() !== dono) {
+      const recusa = new Error(
+        `Este painel pertence à conta ${CFG.usuario}. O token apresentado é da conta ${usuario.login}.`
+      );
+      recusa.status = 'conta';
+      throw recusa;
+    }
+
+    const repo = await gh(`/repos/${CFG.usuario}/${CFG.repositorio}`);
+
+    // Token só de leitura entra e parece funcionar, mas quebra na hora de
+    // publicar — depois do artigo escrito. Melhor recusar na porta.
+    if (!repo.permissions || !repo.permissions.push) {
+      const recusa = new Error(
+        'Este token abre o repositório, mas não pode gravar nele. Refaça o token com "Contents: Read and write".'
+      );
+      recusa.status = 'escrita';
+      throw recusa;
+    }
 
     if (persistir !== undefined) guardarToken(token, persistir);
+    iniciarVigia();
 
     el.avatar.src = usuario.avatar_url || '';
     el.avatar.alt = `Foto de ${usuario.login}`;
@@ -225,7 +289,8 @@ async function conectar(valor, persistir) {
     token = '';
     // Token guardado que o GitHub recusa não serve mais para nada: apaga,
     // senão o erro reaparece a cada visita sem que ninguém saiba por quê.
-    if (erro.status === 401) apagarToken();
+    // O mesmo vale para token de outra conta — não vai passar a valer depois.
+    if (erro.status === 401 || erro.status === 'conta') apagarToken();
     dizer(el.estadoConexao, explicar(erro), 'erro');
     el.telaConexao.hidden = false;
     el.telaTrabalho.hidden = true;
@@ -241,14 +306,62 @@ el.formToken.addEventListener('submit', (e) => {
 });
 
 el.sair.addEventListener('click', () => {
+  // Sair também descarta o rascunho: em máquina emprestada, o texto guardado
+  // reapareceria inteiro para a próxima pessoa que abrisse a página.
+  limparRascunho();
+  encerrarSessao('Você saiu. O token e o rascunho foram apagados deste navegador.');
+});
+
+/* ------------------------------------------------------------------ *
+ * expiração por inatividade
+ * ------------------------------------------------------------------ */
+
+let vigia = null;
+let ultimaRenovacao = 0;
+
+function encerrarSessao(mensagem) {
   apagarToken();
   token = '';
+  pararVigia();
   el.campoToken.value = '';
   el.conta.hidden = true;
   el.telaTrabalho.hidden = true;
   el.telaConexao.hidden = false;
-  dizer(el.estadoConexao, 'Você saiu. O token foi apagado deste navegador.');
-});
+  dizer(el.estadoConexao, mensagem);
+}
+
+function pararVigia() {
+  if (vigia) { clearInterval(vigia); vigia = null; }
+}
+
+/**
+ * Confere de minuto em minuto se o prazo do token venceu. Só entra em ação
+ * quando há token guardado — em navegador sem armazenamento (aba anônima com
+ * tudo bloqueado) a sessão simplesmente dura enquanto a aba estiver aberta,
+ * em vez de o vigia derrubar quem está trabalhando.
+ */
+function iniciarVigia() {
+  pararVigia();
+  if (!lerTokenGuardado()) return;
+  vigia = setInterval(() => {
+    if (!token) return;
+    if (!lerTokenGuardado()) {
+      encerrarSessao('Sessão encerrada por inatividade. Conecte-se novamente para continuar.');
+    }
+  }, 60 * 1000);
+}
+
+function marcarAtividade() {
+  if (!token) return;
+  const agora = Date.now();
+  if (agora - ultimaRenovacao < 60 * 1000) return;
+  ultimaRenovacao = agora;
+  renovarValidade();
+}
+
+for (const evento of ['pointerdown', 'keydown']) {
+  document.addEventListener(evento, marcarAtividade, { passive: true });
+}
 
 /* ------------------------------------------------------------------ *
  * lista de artigos

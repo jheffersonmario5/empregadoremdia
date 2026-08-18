@@ -98,7 +98,6 @@ if (!site.advogado || !site.advogado.nome) {
   avisos.push('Bloco "advogado" ausente ou incompleto em conteudo/site.json — a identificação profissional exigida pela OAB não vai aparecer no rodapé.');
   site.advogado = { nome: '', oab: '', ...site.advogado };
 }
-if (site.advogadaParceira && !site.advogadaParceira.nome) site.advogadaParceira = null;
 
 if (!site.whatsapp || /^0+$|9{6,}/.test(site.whatsapp)) {
   avisos.push('WhatsApp ainda com número de exemplo em conteudo/site.json — ajuste antes de publicar.');
@@ -275,7 +274,7 @@ function rodape() {
     </div>
   </div>
   <div class="conteiner rodape__legal">
-    <p class="rodape__assinatura"><strong>${escapar(site.advogado.nome)}</strong> — ${escapar(site.advogado.oab)}${site.advogadaParceira ? `<br><strong>${escapar(site.advogadaParceira.nome)}</strong> — ${escapar(site.advogadaParceira.oab)}` : ''}</p>
+    <p class="rodape__assinatura"><strong>${escapar(site.advogado.nome)}</strong> — ${escapar(site.advogado.oab)}</p>
     <p>Este site tem caráter exclusivamente informativo, nos termos do Provimento nº 205/2021 do Conselho Federal da OAB. O conteúdo aqui publicado não constitui consulta jurídica, não substitui a análise individualizada de cada caso e não implica garantia de qualquer resultado.</p>
     <p class="rodape__creditos">© ${anoAtual} Empregador em Dia · empregadoremdia.com.br · <a href="/publicar/">Área de publicação</a></p>
   </div>
@@ -660,7 +659,6 @@ ${relacionados.length ? `<section class="secao secao--clara">
 
 function paginaSobre() {
   const a = site.advogado;
-  const p = site.advogadaParceira;
   return pagina({
     titulo: 'Quem responde pelo conteúdo',
     descricao: `Identificação profissional responsável pelo conteúdo do Empregador em Dia: ${a.nome}, ${a.oab}.`,
@@ -682,10 +680,6 @@ function paginaSobre() {
         <p class="ficha__nome">${escapar(a.nome)}</p>
         <p class="ficha__oab">${escapar(a.oab)}</p>
       </div>
-      ${p ? `<div class="ficha">
-        <p class="ficha__nome">${escapar(p.nome)}</p>
-        <p class="ficha__oab">${escapar(p.oab)}</p>
-      </div>` : ''}
     </div>
 
     <h2 id="finalidade">Para que serve este site</h2>
@@ -693,7 +687,7 @@ function paginaSobre() {
     <p>Os textos tratam da norma em tese — o que a lei determina, a quem se aplica e como a obrigação se cumpre. São dirigidos tanto a empresas que contratam pela CLT quanto a famílias que empregam em casa, público que raramente encontra material organizado sobre o assunto.</p>
 
     <h2 id="limites">O que este site não é</h2>
-    <p>Este site não presta consulta jurídica e não estabelece relação de patrocínio entre o leitor e os profissionais aqui identificados. O conteúdo é geral e não considera as particularidades de cada contratação, de convenção ou acordo coletivo aplicável, nem de eventual processo em curso.</p>
+    <p>Este site não presta consulta jurídica e não estabelece relação de patrocínio entre o leitor e o profissional aqui identificado. O conteúdo é geral e não considera as particularidades de cada contratação, de convenção ou acordo coletivo aplicável, nem de eventual processo em curso.</p>
     <p>Nenhum texto publicado aqui promete resultado, compara serviços ou divulga honorários. A publicação observa o Provimento nº 205/2021 do Conselho Federal da OAB, que admite a publicidade de caráter informativo e veda a mercantilização da advocacia.</p>
 
     <h2 id="atualizacao">Atualização</h2>
@@ -850,10 +844,10 @@ function paginaPublicar(artigos) {
           <input id="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…" required>
         </div>
         <label class="caixa-marcar">
-          <input type="checkbox" data-lembrar checked>
+          <input type="checkbox" data-lembrar>
           <span>Continuar conectado neste computador</span>
         </label>
-        <p class="painel__aviso">Use apenas em um computador seu. Em máquina compartilhada, desmarque a opção acima — assim o token some quando a aba fechar.</p>
+        <p class="painel__aviso">Marque apenas em computador seu. Desmarcado, o token some quando a aba fechar. Em qualquer caso a sessão expira após 30 minutos sem uso, e o painel só aceita a sua conta do GitHub.</p>
         <button class="botao botao--principal" type="submit">Conectar</button>
       </form>
       <p class="painel__estado" data-estado-conexao role="status"></p>
