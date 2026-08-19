@@ -199,6 +199,7 @@
     var mensagemErro = function (campo) {
       if (campo.validity.valueMissing) return campo.dataset.erroVazio || 'Preencha este campo.';
       if (campo.validity.typeMismatch) return campo.dataset.erroFormato || 'Confira o formato informado.';
+      if (campo.validity.patternMismatch) return campo.dataset.erroFormato || 'Confira o formato informado.';
       if (campo.validity.tooShort) return campo.dataset.erroCurto || 'O texto está muito curto.';
       return campo.validationMessage || 'Confira este campo.';
     };
@@ -224,9 +225,26 @@
       return valido;
     };
 
+    var telefoneContato = formContato.elements.telefone;
+    if (telefoneContato) {
+      telefoneContato.addEventListener('beforeinput', function (evento) {
+        if (evento.data && /\D/.test(evento.data)) evento.preventDefault();
+      });
+    }
+
     camposContato.forEach(function (campo) {
       campo.addEventListener('blur', function () { validarCampo(campo); });
       campo.addEventListener('input', function () {
+        if (campo === telefoneContato) {
+          var posicao = campo.selectionStart;
+          var antesDoCursor = campo.value.slice(0, posicao == null ? campo.value.length : posicao);
+          var cursorNumerico = antesDoCursor.replace(/\D/g, '').length;
+          var somenteNumeros = campo.value.replace(/\D/g, '').slice(0, 12);
+          if (campo.value !== somenteNumeros) {
+            campo.value = somenteNumeros;
+            try { campo.setSelectionRange(cursorNumerico, cursorNumerico); } catch (_) { /* sem seleção */ }
+          }
+        }
         if (campo.getAttribute('aria-invalid') === 'true') validarCampo(campo);
       });
     });

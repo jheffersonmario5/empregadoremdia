@@ -185,6 +185,16 @@ function botaoWhats(mensagem, rotulo = 'Falar pelo WhatsApp', classe = 'botao bo
   return `<a class="${classe}" href="${escaparAtributo(urlWhats(mensagem))}" target="_blank" rel="noopener noreferrer">${ICONES.whats}${escapar(rotulo)}</a>`;
 }
 
+function whatsappFlutuante() {
+  if (!site.whatsapp) return '';
+  const mensagem = 'Olá! Vim pelo site Empregador em Dia e gostaria de orientação sobre uma questão trabalhista.';
+  return `<a class="whatsapp-flutuante" href="${escaparAtributo(urlWhats(mensagem))}"
+    target="_blank" rel="noopener noreferrer"
+    aria-label="Falar com o escritório pelo WhatsApp — abre em nova aba">
+    ${ICONES.whats}<span class="whatsapp-flutuante__texto">Fale no WhatsApp</span>
+  </a>`;
+}
+
 function marca(classe = 'marca') {
   return `<span class="${classe}">
     <span class="marca__simbolo" aria-hidden="true">${MARCA_SIMBOLO}</span>
@@ -328,11 +338,12 @@ ${dataArtigo ? `<script type="application/ld+json">${JSON.stringify({
     mainEntityOfPage: canonica,
   })}</script>` : ''}
 </head>
-<body class="${classe}">
+<body class="${[classe, site.whatsapp ? 'tem-whatsapp' : ''].filter(Boolean).join(' ')}">
 ${cabecalho(caminho, { progresso })}
 <main id="principal">
 ${corpo}
 </main>
+${whatsappFlutuante()}
 ${rodape()}
 <script src="/assets/site.js" defer></script>
 ${scripts}
@@ -720,7 +731,12 @@ function paginaContato() {
       </div>
       <div class="campo">
         <label for="telefone">Telefone <span class="campo__opcional">(opcional)</span></label>
-        <input id="telefone" name="telefone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30">
+        <input id="telefone" name="telefone" type="tel" autocomplete="tel-national" inputmode="numeric"
+          pattern="0?[1-9][0-9]9[0-9]{8}" maxlength="12" placeholder="61999998888"
+          aria-describedby="telefone-dica erro-telefone"
+          data-erro-formato="Informe DDD + 9 dígitos, somente números. O zero antes do DDD é opcional. Ex.: 61999998888.">
+        <p class="campo__dica" id="telefone-dica">Somente números: DDD + celular com 9 dígitos. Se preferir, inclua o zero antes do DDD.</p>
+        <p class="campo__erro" id="erro-telefone" hidden></p>
       </div>
       <div class="campo">
         <label for="perfil">Você contrata como</label>
