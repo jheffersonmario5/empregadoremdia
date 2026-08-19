@@ -14,7 +14,6 @@ Toda a configuração fica em `conteudo/site.json`.
 | --- | --- |
 | `whatsapp` | `5561991880398` — pronto |
 | `email` | `jheffersonmario6@gmail.com` — pronto |
-| `formularioEndpoint` | **Pendente.** Endereço do Formspree (passo 4 abaixo). Enquanto estiver vazio, o formulário aparece desativado no site |
 
 O gerador avisa no terminal se algo ficou pendente.
 
@@ -103,14 +102,11 @@ Feito isso, abrir `/publicar/` passa a pedir o código antes de mostrar qualquer
 
 ---
 
-## 4. Ativar o formulário de contato
+## 4. Formulário de contato
 
-1. Crie uma conta gratuita em [formspree.io](https://formspree.io).
-2. Crie um formulário novo e copie o endereço gerado (algo como `https://formspree.io/f/xxxxxxx`).
-3. Cole esse endereço em `formularioEndpoint`, dentro de `conteudo/site.json`.
-4. Envie a alteração. O formulário passa a funcionar e as mensagens chegam no seu e-mail.
+O formulário funciona sem serviço externo e sem armazenar dados no site. O visitante preenche nome, canais opcionais, perfil e uma descrição breve; depois escolhe continuar pelo WhatsApp ou pelo aplicativo de e-mail. A mensagem é preparada no próprio dispositivo e só sai quando ele confirma o envio no canal escolhido.
 
-O plano gratuito tem limite mensal de envios. Se o volume crescer, dá para trocar por outro serviço alterando apenas esse campo.
+Os destinos vêm dos campos `whatsapp` e `email` de `conteudo/site.json`. Não há conta de Formspree, limite mensal ou endpoint adicional para configurar.
 
 ---
 

@@ -946,10 +946,28 @@ tbody tr:nth-child(even) { background: color-mix(in srgb, var(--superficie-2) 55
 @media (max-width: 900px) { .grade-contato { grid-template-columns: 1fr; } }
 
 .formulario { display: grid; gap: 1.15rem; }
+.formulario__introducao {
+  color: var(--tinta-2); margin: 0 0 .2rem; max-width: 62ch;
+  padding: .9rem 1rem; border-left: 3px solid var(--marca);
+  background: var(--marca-suave); border-radius: 0 var(--raio-p) var(--raio-p) 0;
+  font-size: .94rem;
+}
 .campo { display: grid; gap: .4rem; }
 .campo label { font-weight: 600; font-size: .92rem; color: var(--marca-forte); }
 .campo__opcional { font-weight: 400; color: var(--tinta-3); }
+.campo__obrigatorio { font-weight: 400; color: var(--tinta-3); }
 .campo__dica { font-size: .83rem; color: var(--tinta-3); margin: 0; }
+.campo__erro { font-size: .83rem; color: var(--perigo); font-weight: 600; margin: 0; }
+.formulario__resumo-erros {
+  border: 1px solid var(--perigo); border-left-width: 3px;
+  border-radius: 0 var(--raio-p) var(--raio-p) 0;
+  background: var(--perigo-suave); color: var(--tinta);
+  padding: .9rem 1rem; font-size: .9rem;
+}
+.formulario__resumo-erros:focus { outline: 3px solid var(--perigo); outline-offset: 3px; }
+.formulario__resumo-erros strong { color: var(--perigo); }
+.formulario__resumo-erros ul { margin: .45rem 0 0; padding-left: 1.2rem; }
+.formulario__resumo-erros a { color: var(--marca-forte); }
 
 .campo input, .campo select, .campo textarea {
   font: inherit; font-size: .98rem; padding: .7rem .9rem;
@@ -962,6 +980,12 @@ tbody tr:nth-child(even) { background: color-mix(in srgb, var(--superficie-2) 55
 .campo input:focus, .campo select:focus, .campo textarea:focus {
   border-color: var(--marca);
   box-shadow: 0 0 0 3px var(--marca-suave);
+}
+.campo input[aria-invalid="true"],
+.campo select[aria-invalid="true"],
+.campo textarea[aria-invalid="true"] {
+  border-color: var(--perigo);
+  box-shadow: 0 0 0 3px var(--perigo-suave);
 }
 .campo input::placeholder, .campo textarea::placeholder { color: var(--tinta-3); }
 
@@ -982,11 +1006,16 @@ tbody tr:nth-child(even) { background: color-mix(in srgb, var(--superficie-2) 55
 
 .formulario__nota { font-size: .85rem; color: var(--tinta-3); margin: 0; }
 .formulario button { justify-self: start; }
+.formulario__acoes { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.formulario__acoes .botao { min-height: 48px; }
+.formulario__acoes .botao svg { width: 19px; height: 19px; flex: none; }
+.formulario__estado { min-height: 1.5em; margin: -.25rem 0 0; font-size: .88rem; }
+.formulario__estado--erro { color: var(--perigo); font-weight: 600; }
+.formulario__estado--ok { color: var(--verde); font-weight: 600; }
 
-.formulario--inativo {
-  border: 1px dashed var(--borda-2); border-radius: var(--raio);
-  padding: 1.4rem; background: var(--superficie-2); color: var(--tinta-2);
-  font-size: .95rem;
+@media (max-width: 520px) {
+  .formulario__acoes { align-items: stretch; }
+  .formulario__acoes .botao { width: 100%; justify-content: center; }
 }
 
 .grade-contato__lado {

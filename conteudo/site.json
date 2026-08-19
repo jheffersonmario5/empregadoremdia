@@ -9,9 +9,6 @@
 
   "email": "jheffersonmario6@gmail.com",
 
-  "_formularioEndpoint": "AJUSTE: crie um formulário gratuito em formspree.io e cole aqui o endereço (ex.: https://formspree.io/f/xxxxxxx). Enquanto estiver vazio, o formulário aparece desativado.",
-  "formularioEndpoint": "",
-
   "atendimento": "Atendimento mediante agendamento prévio.",
 
   "_github": "Repositório onde o site mora. O painel /publicar/ usa estes dados para gravar os artigos.",

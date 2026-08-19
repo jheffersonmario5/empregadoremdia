@@ -87,7 +87,6 @@ for (const [chave, padrao] of [
   ['url', 'https://empregadoremdia.com.br'],
   ['email', ''],
   ['whatsapp', ''],
-  ['formularioEndpoint', ''],
 ]) {
   if (site[chave] === undefined) {
     avisos.push(`Campo "${chave}" ausente em conteudo/site.json — usando "${padrao}".`);
@@ -101,9 +100,6 @@ if (!site.advogado || !site.advogado.nome) {
 
 if (!site.whatsapp || /^0+$|9{6,}/.test(site.whatsapp)) {
   avisos.push('WhatsApp ainda com número de exemplo em conteudo/site.json — ajuste antes de publicar.');
-}
-if (!site.formularioEndpoint) {
-  avisos.push('Formulário sem endpoint em conteudo/site.json — ele será exibido desativado.');
 }
 if (!site.github || !site.github.usuario || !site.github.repositorio) {
   avisos.push('Bloco "github" incompleto em conteudo/site.json — o painel /publicar/ precisa dele.');
@@ -702,19 +698,29 @@ ${chamadaContato('página sobre')}
 
 function paginaContato() {
   const msg = 'Olá! Vim pelo site Empregador em Dia e gostaria de orientação sobre uma questão trabalhista.';
-  const formulario = site.formularioEndpoint
-    ? `<form class="formulario" action="${escaparAtributo(site.formularioEndpoint)}" method="POST">
-      <div class="campo">
-        <label for="nome">Nome</label>
-        <input id="nome" name="nome" type="text" autocomplete="name" required>
+  const formulario = `<form class="formulario" data-contato-form
+      data-whatsapp="${escaparAtributo(site.whatsapp)}"
+      data-email="${escaparAtributo(site.email)}" novalidate>
+      <p class="formulario__introducao">Preencha os dados uma vez e escolha por qual canal deseja continuar. A mensagem será preparada no seu dispositivo para você revisar antes de enviar.</p>
+      <div class="formulario__resumo-erros" data-contato-erros role="alert" tabindex="-1" hidden>
+        <strong>Revise os campos indicados:</strong>
+        <ul></ul>
       </div>
       <div class="campo">
-        <label for="email">E-mail</label>
-        <input id="email" name="email" type="email" autocomplete="email" required>
+        <label for="nome">Nome <span class="campo__obrigatorio">(obrigatório)</span></label>
+        <input id="nome" name="nome" type="text" autocomplete="name" minlength="2" maxlength="100"
+          aria-describedby="erro-nome" data-erro-vazio="Informe seu nome." data-erro-curto="Informe pelo menos 2 caracteres." required>
+        <p class="campo__erro" id="erro-nome" hidden></p>
+      </div>
+      <div class="campo">
+        <label for="email">E-mail <span class="campo__opcional">(opcional)</span></label>
+        <input id="email" name="email" type="email" autocomplete="email" maxlength="160"
+          aria-describedby="erro-email" data-erro-formato="Informe um e-mail válido, como nome@exemplo.com.">
+        <p class="campo__erro" id="erro-email" hidden></p>
       </div>
       <div class="campo">
         <label for="telefone">Telefone <span class="campo__opcional">(opcional)</span></label>
-        <input id="telefone" name="telefone" type="tel" autocomplete="tel">
+        <input id="telefone" name="telefone" type="tel" autocomplete="tel" inputmode="tel" maxlength="30">
       </div>
       <div class="campo">
         <label for="perfil">Você contrata como</label>
@@ -725,18 +731,21 @@ function paginaContato() {
         </select>
       </div>
       <div class="campo">
-        <label for="mensagem">Sobre o que você precisa de orientação</label>
-        <textarea id="mensagem" name="mensagem" rows="6" required></textarea>
+        <label for="mensagem">Sobre o que você precisa de orientação <span class="campo__obrigatorio">(obrigatório)</span></label>
+        <textarea id="mensagem" name="mensagem" rows="6" minlength="10" maxlength="1200"
+          aria-describedby="mensagem-dica erro-mensagem" data-erro-vazio="Escreva brevemente o motivo do contato."
+          data-erro-curto="Escreva pelo menos 10 caracteres." required></textarea>
+        <p class="campo__dica" id="mensagem-dica">Descreva apenas o tema e eventual prazo. Não envie documentos, senhas, dados médicos ou informações sigilosas neste primeiro contato.</p>
+        <p class="campo__erro" id="erro-mensagem" hidden></p>
       </div>
-      <input type="text" name="_gotcha" class="sr" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <input type="hidden" name="_subject" value="Contato pelo site Empregador em Dia">
-      <p class="formulario__nota">Ao enviar, você concorda que os dados informados sejam usados exclusivamente para responder a este contato. O envio não cria relação profissional e não deve conter informações sigilosas.</p>
-      <button class="botao botao--principal" type="submit">Enviar mensagem</button>
-    </form>`
-    : `<div class="formulario formulario--inativo">
-      <p><strong>Formulário ainda não configurado.</strong></p>
-      <p>Defina <code>formularioEndpoint</code> em <code>conteudo/site.json</code> para ativar o envio. Enquanto isso, use o WhatsApp ou o e-mail ao lado.</p>
-    </div>`;
+      <input type="text" name="empresa" class="sr" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="formulario__nota">O site não armazena estes dados. Ao continuar, o WhatsApp ou o aplicativo de e-mail mostrará a mensagem pronta; ela só será enviada depois da sua confirmação. O contato não cria relação profissional.</p>
+      <div class="formulario__acoes" aria-label="Escolha como continuar">
+        ${site.whatsapp ? `<button class="botao botao--principal" type="submit" name="canal" value="whatsapp">${ICONES.whats}<span>Continuar no WhatsApp</span></button>` : ''}
+        ${site.email ? `<button class="botao botao--secundario" type="submit" name="canal" value="email">${ICONES.email}<span>Continuar por e-mail</span></button>` : ''}
+      </div>
+      <p class="formulario__estado" data-contato-estado role="status" aria-live="polite" tabindex="-1"></p>
+    </form>`;
 
   return pagina({
     titulo: 'Contato',

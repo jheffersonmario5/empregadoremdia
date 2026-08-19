@@ -182,4 +182,121 @@
     if (campoBusca) campoBusca.addEventListener('input', aplicar);
     aplicar();
   }
+
+  /* ---------------------------------------------------------------- *
+   * formulário de contato: prepara a mensagem no dispositivo
+   * ---------------------------------------------------------------- */
+
+  var formContato = document.querySelector('[data-contato-form]');
+
+  if (formContato) {
+    var estadoContato = formContato.querySelector('[data-contato-estado]');
+    var resumoErros = formContato.querySelector('[data-contato-erros]');
+    var camposContato = Array.prototype.slice.call(
+      formContato.querySelectorAll('input:not([name="empresa"]), textarea, select')
+    );
+
+    var mensagemErro = function (campo) {
+      if (campo.validity.valueMissing) return campo.dataset.erroVazio || 'Preencha este campo.';
+      if (campo.validity.typeMismatch) return campo.dataset.erroFormato || 'Confira o formato informado.';
+      if (campo.validity.tooShort) return campo.dataset.erroCurto || 'O texto está muito curto.';
+      return campo.validationMessage || 'Confira este campo.';
+    };
+
+    var validarCampo = function (campo) {
+      campo.setCustomValidity('');
+      var valor = typeof campo.value === 'string' ? campo.value.trim() : '';
+      if (campo.required && !valor) campo.setCustomValidity(campo.dataset.erroVazio || 'Preencha este campo.');
+      else if (campo.minLength > 0 && valor && valor.length < campo.minLength) {
+        campo.setCustomValidity(campo.dataset.erroCurto || 'O texto está muito curto.');
+      }
+
+      var erro = campo.getAttribute('aria-describedby')
+        ? document.getElementById(campo.getAttribute('aria-describedby').split(' ').pop())
+        : null;
+      var valido = campo.checkValidity();
+
+      campo.setAttribute('aria-invalid', valido ? 'false' : 'true');
+      if (erro && erro.classList.contains('campo__erro')) {
+        erro.textContent = valido ? '' : mensagemErro(campo);
+        erro.hidden = valido;
+      }
+      return valido;
+    };
+
+    camposContato.forEach(function (campo) {
+      campo.addEventListener('blur', function () { validarCampo(campo); });
+      campo.addEventListener('input', function () {
+        if (campo.getAttribute('aria-invalid') === 'true') validarCampo(campo);
+      });
+    });
+
+    formContato.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Campo invisível: robôs costumam preenchê-lo, pessoas não.
+      if (formContato.elements.empresa && formContato.elements.empresa.value) return;
+
+      var invalidos = [];
+      camposContato.forEach(function (campo) {
+        if (!validarCampo(campo)) invalidos.push(campo);
+      });
+
+      if (invalidos.length) {
+        var listaErros = resumoErros.querySelector('ul');
+        listaErros.textContent = '';
+        invalidos.forEach(function (campo) {
+          var item = document.createElement('li');
+          var link = document.createElement('a');
+          var rotulo = formContato.querySelector('label[for="' + campo.id + '"]');
+          link.href = '#' + campo.id;
+          link.textContent = rotulo ? rotulo.childNodes[0].textContent.trim() + ': ' + mensagemErro(campo) : mensagemErro(campo);
+          link.addEventListener('click', function (evento) {
+            evento.preventDefault();
+            campo.focus();
+          });
+          item.appendChild(link);
+          listaErros.appendChild(item);
+        });
+        resumoErros.hidden = false;
+        resumoErros.focus();
+        estadoContato.textContent = '';
+        estadoContato.className = 'formulario__estado';
+        return;
+      }
+
+      resumoErros.hidden = true;
+
+      var dados = new FormData(formContato);
+      var perfil = formContato.elements.perfil;
+      var perfilTexto = perfil.options[perfil.selectedIndex].text;
+      var linhas = [
+        'Olá! Vim pelo site Empregador em Dia.',
+        '',
+        'Nome: ' + dados.get('nome').trim(),
+        'E-mail: ' + (dados.get('email').trim() || 'não informado'),
+        'Telefone: ' + (dados.get('telefone').trim() || 'não informado'),
+        'Perfil: ' + perfilTexto,
+        '',
+        'Motivo do contato:',
+        dados.get('mensagem').trim(),
+      ];
+      var texto = linhas.join('\n');
+      var canal = e.submitter ? e.submitter.value : (formContato.dataset.whatsapp ? 'whatsapp' : 'email');
+
+      estadoContato.className = 'formulario__estado formulario__estado--ok';
+      if (canal === 'email') {
+        var assunto = 'Contato pelo site Empregador em Dia - ' + dados.get('nome').trim();
+        estadoContato.textContent = 'Abrindo seu aplicativo de e-mail. Revise a mensagem e confirme o envio por lá.';
+        window.location.href = 'mailto:' + formContato.dataset.email
+          + '?subject=' + encodeURIComponent(assunto)
+          + '&body=' + encodeURIComponent(texto);
+      } else {
+        estadoContato.textContent = 'Abrindo o WhatsApp. Revise a mensagem e confirme o envio por lá.';
+        var destino = 'https://wa.me/' + formContato.dataset.whatsapp + '?text=' + encodeURIComponent(texto);
+        var janela = window.open(destino, '_blank', 'noopener,noreferrer');
+        if (!janela) window.location.href = destino;
+      }
+    });
+  }
 })();
