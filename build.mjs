@@ -723,7 +723,7 @@ function paginaContato() {
   const formulario = `<form class="formulario" data-contato-form
       data-whatsapp="${escaparAtributo(site.whatsapp)}"
       data-email="${escaparAtributo(site.email)}" novalidate>
-      <p class="formulario__introducao">Preencha os dados uma vez e escolha por qual canal deseja continuar. A mensagem será preparada no seu dispositivo para você revisar antes de enviar.</p>
+      <p class="formulario__introducao">Preencha os dados uma vez e escolha o canal de envio. A mensagem será preparada no seu dispositivo para você revisar antes de enviar.</p>
       <div class="formulario__resumo-erros" data-contato-erros role="alert" tabindex="-1" hidden>
         <strong>Revise os campos indicados:</strong>
         <ul></ul>
@@ -764,10 +764,10 @@ function paginaContato() {
         <p class="campo__erro" id="erro-mensagem" hidden></p>
       </div>
       <input type="text" name="empresa" class="sr" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <p class="formulario__nota">O site não armazena estes dados. Ao continuar, o WhatsApp ou o aplicativo de e-mail mostrará a mensagem pronta; ela só será enviada depois da sua confirmação. O contato não cria relação profissional.</p>
-      <div class="formulario__acoes" aria-label="Escolha como continuar">
-        ${site.whatsapp ? `<button class="botao botao--principal" type="submit" name="canal" value="whatsapp">${ICONES.whats}<span>Continuar no WhatsApp</span></button>` : ''}
-        ${site.email ? `<button class="botao botao--secundario" type="submit" name="canal" value="email">${ICONES.email}<span>Continuar por e-mail</span></button>` : ''}
+      <p class="formulario__nota">O site não armazena estes dados. Ao escolher uma das opções, o WhatsApp ou o aplicativo de e-mail mostrará a mensagem pronta; ela só será enviada depois da sua confirmação. O contato não cria relação profissional.</p>
+      <div class="formulario__acoes" aria-label="Escolha por onde enviar">
+        ${site.whatsapp ? `<button class="botao botao--principal" type="submit" name="canal" value="whatsapp">${ICONES.whats}<span>Enviar pelo WhatsApp</span></button>` : ''}
+        ${site.email ? `<button class="botao botao--secundario" type="submit" name="canal" value="email">${ICONES.email}<span>Enviar por e-mail</span></button>` : ''}
       </div>
       <p class="formulario__estado" data-contato-estado role="status" aria-live="polite" tabindex="-1"></p>
     </form>`;
