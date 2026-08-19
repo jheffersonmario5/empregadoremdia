@@ -5,7 +5,7 @@ descricao: "A LC 150/2015 trouxe regras próprias de jornada para o trabalho dom
 trilha: "domestico"
 assunto: "Durante o contrato"
 data: 2026-08-03
-ordem: 3
+ordem: 6
 destaque: "nao"
 ---
 

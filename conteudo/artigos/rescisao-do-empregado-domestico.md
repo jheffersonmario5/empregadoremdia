@@ -5,7 +5,7 @@ descricao: "O que muda entre dispensa, pedido de demissão e justa causa no trab
 trilha: "domestico"
 assunto: "Fim do contrato"
 data: 2026-07-15
-ordem: 5
+ordem: 8
 destaque: "nao"
 ---
 

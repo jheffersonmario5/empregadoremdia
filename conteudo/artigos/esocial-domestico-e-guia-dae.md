@@ -5,7 +5,7 @@ descricao: "A guia DAE reúne INSS, FGTS, seguro de acidente e a indenização c
 trilha: "domestico"
 assunto: "Durante o contrato"
 data: 2026-08-12
-ordem: 2
+ordem: 5
 destaque: "sim"
 ---
 

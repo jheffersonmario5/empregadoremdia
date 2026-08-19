@@ -5,7 +5,7 @@ descricao: "Trinta dias de férias com um terço, 13º em duas parcelas, vale-tr
 trilha: "domestico"
 assunto: "Durante o contrato"
 data: 2026-07-25
-ordem: 4
+ordem: 7
 destaque: "nao"
 ---
 

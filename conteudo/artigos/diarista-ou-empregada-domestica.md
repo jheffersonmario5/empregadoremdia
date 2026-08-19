@@ -5,7 +5,7 @@ descricao: "A diferença não está no nome do combinado nem na forma de pagamen
 trilha: "domestico"
 assunto: "Antes de contratar"
 data: 2026-08-17
-ordem: 1
+ordem: 2
 destaque: "sim"
 ---
 
