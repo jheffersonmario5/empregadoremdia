@@ -9,6 +9,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 import {
@@ -25,6 +26,16 @@ const DIR_CONTEUDO = path.join(RAIZ, 'conteudo');
 const DIR_ARTIGOS = path.join(DIR_CONTEUDO, 'artigos');
 const DIR_ASSETS = path.join(RAIZ, 'assets');
 const DIR_SAIDA = path.join(RAIZ, '_site');
+
+function versaoAsset(nome) {
+  return createHash('sha256')
+    .update(fs.readFileSync(path.join(DIR_ASSETS, nome)))
+    .digest('hex')
+    .slice(0, 10);
+}
+
+const VERSAO_CSS = versaoAsset('estilo.css');
+const VERSAO_JS = versaoAsset('site.js');
 
 const avisos = [];
 
@@ -323,7 +334,7 @@ ${robots ? `<meta name="robots" content="${escaparAtributo(robots)}">` : ''}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..600&display=swap">
-<link rel="stylesheet" href="/assets/estilo.css">
+<link rel="stylesheet" href="/assets/estilo.css?v=${VERSAO_CSS}">
 <script>try{var t=localStorage.getItem('eed-tema');if(t==='escuro'||t==='claro')document.documentElement.setAttribute('data-tema',t);}catch(e){}</script>
 ${dataArtigo ? `<script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
@@ -345,7 +356,7 @@ ${corpo}
 </main>
 ${whatsappFlutuante()}
 ${rodape()}
-<script src="/assets/site.js" defer></script>
+<script src="/assets/site.js?v=${VERSAO_JS}" defer></script>
 ${scripts}
 </body>
 </html>`;
