@@ -732,10 +732,8 @@ function paginaContato() {
       <div class="campo">
         <label for="telefone">Telefone <span class="campo__opcional">(opcional)</span></label>
         <input id="telefone" name="telefone" type="tel" autocomplete="tel-national" inputmode="numeric"
-          pattern="0?[1-9][0-9]9[0-9]{8}" maxlength="12" placeholder="61999998888"
-          aria-describedby="telefone-dica erro-telefone"
-          data-erro-formato="Informe DDD + 9 dígitos, somente números. O zero antes do DDD é opcional. Ex.: 61999998888.">
-        <p class="campo__dica" id="telefone-dica">Somente números: DDD + celular com 9 dígitos. Se preferir, inclua o zero antes do DDD.</p>
+          maxlength="16" aria-describedby="erro-telefone"
+          data-erro-curto="Telefone incompleto. Digite o DDD e os 9 dígitos do celular.">
         <p class="campo__erro" id="erro-telefone" hidden></p>
       </div>
       <div class="campo">

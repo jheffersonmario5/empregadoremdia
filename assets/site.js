@@ -208,6 +208,9 @@
       campo.setCustomValidity('');
       var valor = typeof campo.value === 'string' ? campo.value.trim() : '';
       if (campo.required && !valor) campo.setCustomValidity(campo.dataset.erroVazio || 'Preencha este campo.');
+      else if (campo === telefoneContato && valor && valor.replace(/\D/g, '').length < 11) {
+        campo.setCustomValidity(campo.dataset.erroCurto || 'Telefone incompleto.');
+      }
       else if (campo.minLength > 0 && valor && valor.length < campo.minLength) {
         campo.setCustomValidity(campo.dataset.erroCurto || 'O texto está muito curto.');
       }
@@ -227,6 +230,25 @@
 
     var telefoneContato = formContato.elements.telefone;
     if (telefoneContato) {
+      var formatarTelefone = function (valor) {
+        var numeros = valor.replace(/\D/g, '').slice(0, 12);
+        var temZero = numeros.charAt(0) === '0';
+        var inicioDDD = temZero ? 1 : 0;
+        var ddd = numeros.slice(inicioDDD, inicioDDD + 2);
+        var celular = numeros.slice(inicioDDD + 2, inicioDDD + 11);
+        var formatado = '';
+
+        if (temZero || ddd) {
+          formatado += '(' + (temZero ? '0' : '') + ddd;
+          if (ddd.length === 2) formatado += ')';
+        }
+        if (celular) {
+          formatado += ' ' + celular.slice(0, 5);
+          if (celular.length > 5) formatado += '-' + celular.slice(5);
+        }
+        return formatado;
+      };
+
       telefoneContato.addEventListener('beforeinput', function (evento) {
         if (evento.data && /\D/.test(evento.data)) evento.preventDefault();
       });
@@ -237,12 +259,20 @@
       campo.addEventListener('input', function () {
         if (campo === telefoneContato) {
           var posicao = campo.selectionStart;
-          var antesDoCursor = campo.value.slice(0, posicao == null ? campo.value.length : posicao);
+          var valorAnterior = campo.value;
+          var cursorNoFim = posicao == null || posicao === valorAnterior.length;
+          var antesDoCursor = valorAnterior.slice(0, posicao == null ? valorAnterior.length : posicao);
           var cursorNumerico = antesDoCursor.replace(/\D/g, '').length;
-          var somenteNumeros = campo.value.replace(/\D/g, '').slice(0, 12);
-          if (campo.value !== somenteNumeros) {
-            campo.value = somenteNumeros;
-            try { campo.setSelectionRange(cursorNumerico, cursorNumerico); } catch (_) { /* sem seleção */ }
+          var valorFormatado = formatarTelefone(valorAnterior);
+          if (valorAnterior !== valorFormatado) {
+            campo.value = valorFormatado;
+            var novoCursor = cursorNoFim ? valorFormatado.length : 0;
+            var numerosVistos = 0;
+            while (!cursorNoFim && novoCursor < valorFormatado.length && numerosVistos < cursorNumerico) {
+              if (/\d/.test(valorFormatado.charAt(novoCursor))) numerosVistos++;
+              novoCursor++;
+            }
+            try { campo.setSelectionRange(novoCursor, novoCursor); } catch (_) { /* sem seleção */ }
           }
         }
         if (campo.getAttribute('aria-invalid') === 'true') validarCampo(campo);
