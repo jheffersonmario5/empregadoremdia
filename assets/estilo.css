@@ -1197,3 +1197,15 @@ tbody tr:nth-child(even) { background: color-mix(in srgb, var(--superficie-2) 55
 }
 .painel__resumo-publicado p { margin: 0 0 .4rem; }
 .painel__resumo-publicado p:last-child { margin: 0; }
+
+.painel__resumo-publicado--parcial {
+  border-color: var(--ambar);
+  background: var(--ambar-suave);
+}
+
+.painel__aviso--bloco {
+  display: block;
+  margin-bottom: 1.4rem;
+  border-left-color: var(--perigo);
+  background: var(--perigo-suave);
+}

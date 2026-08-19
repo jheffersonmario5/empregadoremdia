@@ -237,6 +237,21 @@ async function apagarArquivo(caminho, sha, mensagem) {
   });
 }
 
+/**
+ * Manda o GitHub reconstruir o site.
+ *
+ * Gravar o arquivo não basta: commits feitos pela API com token pessoal não
+ * disparam o gatilho de "push" do workflow. Sem esta chamada, o artigo entra
+ * no repositório e nunca chega ao ar. O workflow aceita `workflow_dispatch`
+ * justamente para isso.
+ */
+async function pedirReconstrucao() {
+  await gh(
+    `/repos/${CFG.usuario}/${CFG.repositorio}/actions/workflows/${CFG.workflow}/dispatches`,
+    { method: 'POST', body: JSON.stringify({ ref: CFG.ramo }) }
+  );
+}
+
 /* ------------------------------------------------------------------ *
  * conexão
  * ------------------------------------------------------------------ */
@@ -285,6 +300,7 @@ async function conectar(valor, persistir) {
     dizer(el.estadoConexao, '');
 
     await carregarLista();
+    await conferirPermissaoActions();
   } catch (erro) {
     token = '';
     // Token guardado que o GitHub recusa não serve mais para nada: apaga,
@@ -295,6 +311,26 @@ async function conectar(valor, persistir) {
     el.telaConexao.hidden = false;
     el.telaTrabalho.hidden = true;
     el.conta.hidden = true;
+  }
+}
+
+/**
+ * Gravar e reconstruir são permissões diferentes. Um token só com "Contents"
+ * publica no repositório e não leva nada ao ar — e o efeito só apareceria
+ * depois, na forma de um artigo escrito que ninguém consegue ver.
+ */
+async function conferirPermissaoActions() {
+  const alerta = $('[data-alerta-actions]');
+  if (!alerta) return;
+  try {
+    await gh(`/repos/${CFG.usuario}/${CFG.repositorio}/actions/workflows/${CFG.workflow}`);
+    alerta.hidden = true;
+  } catch (erro) {
+    alerta.innerHTML =
+      'Este token grava artigos, mas não consegue reconstruir o site: falta a permissão ' +
+      '<strong>Actions: Read and write</strong>. O que for publicado fica no repositório sem ir ao ar, ' +
+      'até que a reconstrução seja iniciada na aba Actions do GitHub.';
+    alerta.hidden = false;
   }
 }
 
@@ -678,8 +714,11 @@ el.form.addEventListener('submit', async (e) => {
       await apagarArquivo(editando.caminho, editando.sha, `Remove endereço antigo: ${editando.slug}`);
     }
 
+    let reconstruindo = true;
+    try { await pedirReconstrucao(); } catch (e) { reconstruindo = false; }
+
     limparRascunho();
-    mostrarSucesso(slug, !!editando);
+    mostrarSucesso(slug, !!editando, reconstruindo);
     await carregarLista();
   } catch (erro) {
     dizer(el.estadoArtigo, explicar(erro), 'erro');
@@ -688,20 +727,25 @@ el.form.addEventListener('submit', async (e) => {
   }
 });
 
-function mostrarSucesso(slug, atualizacao) {
+function mostrarSucesso(slug, atualizacao, reconstruindo) {
   dizer(el.estadoArtigo, '');
   const antigo = $('.painel__resumo-publicado');
   if (antigo) antigo.remove();
 
-  const caixa = document.createElement('div');
-  caixa.className = 'painel__resumo-publicado';
-  caixa.innerHTML = `
-    <p><strong>${atualizacao ? 'Alteração enviada.' : 'Artigo enviado.'}</strong> O site está sendo reconstruído — leva de um a dois minutos.</p>
-    <p>
+  const acoes = `<p>
       <a href="https://github.com/${CFG.usuario}/${CFG.repositorio}/actions" target="_blank" rel="noopener noreferrer">Acompanhar a publicação</a>
       ·
       <a href="${CFG.dominio}/artigos/${encodeURIComponent(slug)}/" target="_blank" rel="noopener noreferrer">Abrir a página</a>
     </p>`;
+
+  const caixa = document.createElement('div');
+  caixa.className = reconstruindo
+    ? 'painel__resumo-publicado'
+    : 'painel__resumo-publicado painel__resumo-publicado--parcial';
+  caixa.innerHTML = reconstruindo
+    ? `<p><strong>${atualizacao ? 'Alteração enviada.' : 'Artigo enviado.'}</strong> O site está sendo reconstruído — leva de um a dois minutos.</p>${acoes}`
+    : `<p><strong>${atualizacao ? 'Alteração gravada.' : 'Artigo gravado.'}</strong> O texto já está no repositório, mas não foi possível iniciar a reconstrução do site — ele continua no ar na versão anterior.</p>
+       <p>Isso acontece quando o token não tem a permissão <strong>Actions: Read and write</strong>. Gere um token novo com essa permissão, ou abra a aba Actions do repositório e clique em <em>Run workflow</em> para publicar agora.</p>${acoes}`;
   el.estadoArtigo.after(caixa);
   caixa.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
@@ -718,9 +762,19 @@ el.excluir.addEventListener('click', async () => {
 
   try {
     await apagarArquivo(editando.caminho, editando.sha, `Remove artigo: ${editando.dados.titulo || editando.slug}`);
+
+    let reconstruindo = true;
+    try { await pedirReconstrucao(); } catch (e) { reconstruindo = false; }
+
     fecharEditor();
     await carregarLista();
-    dizer(el.estadoArtigo, '');
+    dizer(
+      el.estadoArtigo,
+      reconstruindo
+        ? 'Artigo excluído. O site está sendo reconstruído.'
+        : 'Artigo excluído do repositório, mas a reconstrução não foi iniciada — o token precisa da permissão Actions: Read and write.',
+      reconstruindo ? 'ok' : 'erro'
+    );
   } catch (erro) {
     dizer(el.estadoArtigo, explicar(erro), 'erro');
   } finally {

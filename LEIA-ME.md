@@ -124,7 +124,7 @@ O painel escreve direto no repositório, e para isso precisa de uma autorizaçã
 
 1. Abra [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new).
 2. Em **Repository access**, marque *Only select repositories* → `empregadoremdia`.
-3. Em **Permissions → Repository permissions**, coloque **Contents** em *Read and write*.
+3. Em **Permissions → Repository permissions**, coloque **Contents** em *Read and write* (grava o artigo) e **Actions** em *Read and write* (reconstrói o site). Sem a segunda, o texto entra no repositório e não vai ao ar.
 4. Escolha a validade, gere e copie o token (começa com `github_pat_`).
 5. Cole no campo do painel e clique em **Conectar**.
 

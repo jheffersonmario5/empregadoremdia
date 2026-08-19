@@ -791,6 +791,7 @@ function paginaPublicar(artigos) {
     ramo: gh.ramo || 'main',
     pasta: 'conteudo/artigos',
     dominio: site.url.replace(/\/$/, ''),
+    workflow: gh.workflow || 'publicar.yml',
   });
 
   const ferramenta = (acao, rotulo, dica) =>
@@ -833,7 +834,8 @@ function paginaPublicar(artigos) {
         <ol>
           <li>Abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">github.com/settings/personal-access-tokens/new</a>.</li>
           <li>Em <strong>Repository access</strong>, escolha <em>Only select repositories</em> e marque <strong>${escapar(gh.repositorio || 'o repositório do site')}</strong>.</li>
-          <li>Em <strong>Permissions → Repository permissions</strong>, coloque <strong>Contents</strong> em <em>Read and write</em>.</li>
+          <li>Em <strong>Permissions → Repository permissions</strong>, coloque <strong>Contents</strong> em <em>Read and write</em> — é o que permite gravar o artigo.</li>
+          <li>Na mesma lista, coloque <strong>Actions</strong> em <em>Read and write</em> — é o que permite reconstruir o site depois de gravar. Sem ela o texto entra no repositório, mas não vai ao ar.</li>
           <li>Defina a validade, gere e copie o token (começa com <code>github_pat_</code>).</li>
         </ol>
       </details>
@@ -854,6 +856,8 @@ function paginaPublicar(artigos) {
     </div>
 
     <div data-tela="trabalho" hidden>
+
+      <p class="painel__aviso painel__aviso--bloco" data-alerta-actions hidden></p>
 
       <div class="painel__barra">
         <div class="filtros__busca">
