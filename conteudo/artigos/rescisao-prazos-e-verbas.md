@@ -5,7 +5,7 @@ descricao: "O prazo de pagamento das verbas rescisórias é de 10 dias e a multa
 trilha: "empresa"
 assunto: "Desligamento"
 data: 2026-07-20
-ordem: 5
+ordem: 9
 destaque: "nao"
 ---
 

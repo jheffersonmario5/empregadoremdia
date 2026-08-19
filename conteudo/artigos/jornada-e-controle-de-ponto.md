@@ -5,7 +5,7 @@ descricao: "Quem é obrigado a controlar ponto, como funcionam horas extras, int
 trilha: "empresa"
 assunto: "Contratação"
 data: 2026-07-28
-ordem: 2
+ordem: 3
 destaque: "nao"
 ---
 

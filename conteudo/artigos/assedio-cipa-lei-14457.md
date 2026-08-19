@@ -5,7 +5,7 @@ descricao: "A lei renomeou a CIPA e criou quatro obrigações concretas de preve
 trilha: "empresa"
 assunto: "Saúde e segurança"
 data: 2026-08-10
-ordem: 4
+ordem: 6
 destaque: "nao"
 ---
 

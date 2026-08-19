@@ -5,7 +5,7 @@ descricao: "Registro, exame médico, contrato e eSocial têm momento certo para 
 trilha: "empresa"
 assunto: "Contratação"
 data: 2026-08-05
-ordem: 1
+ordem: 2
 destaque: "nao"
 ---
 

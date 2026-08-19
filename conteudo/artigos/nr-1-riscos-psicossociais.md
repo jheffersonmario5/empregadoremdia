@@ -5,7 +5,7 @@ descricao: "Desde maio de 2026, os riscos psicossociais passaram a ser fiscaliza
 trilha: "empresa"
 assunto: "Saúde e segurança"
 data: 2026-08-17
-ordem: 3
+ordem: 5
 destaque: "sim"
 ---
 
