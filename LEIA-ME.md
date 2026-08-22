@@ -108,6 +108,25 @@ O formulário funciona sem serviço externo e sem armazenar dados no site. O vis
 
 Os destinos vêm dos campos `whatsapp` e `email` de `conteudo/site.json`. Não há conta de Formspree, limite mensal ou endpoint adicional para configurar.
 
+### 4.1 Calculadoras trabalhistas
+
+A página `/calculadoras/` reúne quatro estimativas para o empregador:
+
+- custo médio de uma contratação CLT, com enquadramentos para Simples Nacional, Anexo IV, Lucro Presumido/Real e empregador doméstico;
+- férias, terço constitucional, abono pecuniário e adiantamento estimado do 13º;
+- 13º salário por avos;
+- rescisão CLT, separando o pagamento direto dos recolhimentos de FGTS.
+
+Tudo é calculado no navegador. Os valores digitados não são enviados nem armazenados. As fórmulas puras ficam em `assets/calculadoras.js` e têm testes automatizados em `tests/calculadoras.test.mjs`.
+
+Os resultados são deliberadamente **brutos**: não tentam simular INSS, imposto de renda ou todas as incidências da folha. Isso evita atrelar a ferramenta a tabelas anuais e deixa explícito que norma coletiva, médias, afastamentos e particularidades do contrato precisam ser conferidos fora da estimativa.
+
+Para verificar as fórmulas depois de qualquer alteração:
+
+```bash
+npm test
+```
+
 ---
 
 ## 5. Publicar um artigo novo — pelo próprio site
@@ -246,7 +265,9 @@ conteudo/artigos/*.md     os artigos — um arquivo por texto
 assets/estilo.css         aparência do site (claro e escuro)
 assets/markdown.js        conversor de Markdown — usado pelo gerador E pelo painel
 assets/site.js            menu, tema, busca, sumário e barra de progresso
+assets/calculadoras.js    fórmulas e interface da página /calculadoras/
 assets/publicar.js        o painel /publicar/
+tests/                    testes automatizados das fórmulas
 build.mjs                 gerador do site
 .github/workflows/        publicação automática no GitHub Pages
 _site/                    resultado gerado (não editar, não enviar)

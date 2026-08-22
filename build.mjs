@@ -36,6 +36,7 @@ function versaoAsset(nome) {
 
 const VERSAO_CSS = versaoAsset('estilo.css');
 const VERSAO_JS = versaoAsset('site.js');
+const VERSAO_CALCULADORAS = versaoAsset('calculadoras.js');
 
 const avisos = [];
 
@@ -76,6 +77,7 @@ const ICONES = {
   lua: svg('<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>'),
   relogio: svg('<path d="M12 7v5l3 2m6-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>'),
   livro: svg('<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v15H6.5A2.5 2.5 0 0 0 4 19.5V4.5ZM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/>'),
+  calculadora: svg('<rect x="4" y="2.5" width="16" height="19" rx="2"/><path d="M7.5 6.5h9v3h-9zM8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01M16 17h.01"/>'),
   balanca: svg('<path d="M12 3v18M7 21h10M12 6 5 9m7-3 7 3M5 9l-2.5 5a2.8 2.8 0 0 0 5 0L5 9Zm14 0-2.5 5a2.8 2.8 0 0 0 5 0L19 9Z"/>'),
   escudo: svg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>'),
   email: svg('<path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h13A2.5 2.5 0 0 1 21 7.5v9A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5v-9Z"/><path d="m3.5 7 8.5 6 8.5-6"/>'),
@@ -218,6 +220,7 @@ function cabecalho(atual = '', { progresso = false } = {}) {
     ['/', 'Início'],
     ['/empresa/', 'Empresa'],
     ['/domestico/', 'Doméstico'],
+    ['/calculadoras/', 'Calculadoras'],
     ['/conteudo/', 'Conteúdo'],
     ['/sobre/', 'Sobre'],
   ];
@@ -279,6 +282,7 @@ function rodape() {
       <ul>
         <li><a href="/empresa/">Trilha Empresa</a></li>
         <li><a href="/domestico/">Trilha Doméstico</a></li>
+        <li><a href="/calculadoras/">Calculadoras trabalhistas</a></li>
         <li><a href="/conteudo/">Todos os artigos</a></li>
       </ul>
     </div>
@@ -444,6 +448,18 @@ function paginaInicial(artigos) {
       ${porta(TRILHAS.empresa)}
       ${porta(TRILHAS.domestico)}
     </div>
+  </div>
+</section>
+
+<section class="secao secao--clara secao-calculadoras-home">
+  <div class="conteiner calculadoras-home">
+    <div class="calculadoras-home__icone" aria-hidden="true">${ICONES.calculadora}</div>
+    <div class="calculadoras-home__texto">
+      <p class="secao__olho">Faça uma estimativa</p>
+      <h2 class="secao__titulo">Quanto essa obrigação pode custar?</h2>
+      <p>Simule férias, 13º, rescisão e o custo médio de uma contratação CLT. O resultado vem com as parcelas abertas e as premissas usadas.</p>
+    </div>
+    <a class="botao botao--principal" href="/calculadoras/">Abrir calculadoras ${ICONES.seta}</a>
   </div>
 </section>
 
@@ -671,6 +687,366 @@ ${relacionados.length ? `<section class="secao secao--clara">
     </div>
   </div>
 </section>` : ''}
+`,
+  });
+}
+
+function paginaCalculadoras() {
+  const config = JSON.stringify({
+    whatsapp: site.whatsapp || '',
+    atualizadoEm: '2026-08-22',
+  });
+
+  const resultadoVazio = (titulo, texto) => `<aside class="calculadora-resultado" data-resultado aria-live="polite">
+    <div class="calculadora-resultado__vazio" data-resultado-vazio>
+      <span class="calculadora-resultado__icone" aria-hidden="true">${ICONES.calculadora}</span>
+      <h3>${titulo}</h3>
+      <p>${texto}</p>
+    </div>
+  </aside>`;
+
+  const resumoErros = `<div class="formulario__resumo-erros" data-calculadora-erros role="alert" tabindex="-1" hidden>
+    <strong>Revise os campos indicados:</strong>
+    <ul></ul>
+  </div>`;
+
+  return pagina({
+    titulo: 'Calculadoras trabalhistas para o empregador',
+    descricao: 'Estime férias, 13º salário, rescisão e custo de contratação CLT com memória de cálculo e premissas abertas.',
+    caminho: '/calculadoras/',
+    classe: 'pagina-calculadoras',
+    scripts: `<script>window.EED_CALCULADORAS = ${config};</script>
+<script type="module" src="/assets/calculadoras.js?v=${VERSAO_CALCULADORAS}"></script>`,
+    corpo: `
+<section class="capa-interna calculadoras-capa">
+  <div class="conteiner">
+    <nav class="migalhas" aria-label="Você está em"><a href="/">Início</a> <span aria-hidden="true">/</span> <span>Calculadoras</span></nav>
+    <div class="calculadoras-capa__grade">
+      <div>
+        <p class="secao__olho">Estimativa com a conta aberta</p>
+        <h1>Calculadoras trabalhistas para quem emprega</h1>
+        <p class="capa-interna__linha">Planeje férias, 13º, desligamentos e novas contratações. Você vê o total, cada parcela e as premissas usadas — sem criar cadastro e sem enviar os dados para o site.</p>
+      </div>
+      <aside class="calculadoras-capa__nota">
+        <span aria-hidden="true">${ICONES.escudo}</span>
+        <p><strong>Estimativa, não folha de pagamento.</strong> Os resultados são brutos e não incluem INSS, IR, norma coletiva, afastamentos ou todas as particularidades possíveis.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="secao calculadoras-area" id="ferramentas">
+  <div class="conteiner" data-calculadoras>
+    <div class="calculadoras-abas" role="tablist" aria-label="Escolha uma calculadora">
+      <button id="aba-custo" type="button" role="tab" aria-selected="true" aria-controls="calculadora-custo" tabindex="0" data-calculadora-aba="custo">
+        <span aria-hidden="true">${ICONES.empresa}</span>
+        <strong>Custo de contratação</strong>
+        <small>Salário, encargos e provisões</small>
+      </button>
+      <button id="aba-ferias" type="button" role="tab" aria-selected="false" aria-controls="calculadora-ferias" tabindex="-1" data-calculadora-aba="ferias">
+        <span aria-hidden="true">${ICONES.sol}</span>
+        <strong>Férias</strong>
+        <small>Remuneração, 1/3 e abono</small>
+      </button>
+      <button id="aba-decimo" type="button" role="tab" aria-selected="false" aria-controls="calculadora-decimo" tabindex="-1" data-calculadora-aba="decimo">
+        <span aria-hidden="true">${ICONES.calculadora}</span>
+        <strong>13º salário</strong>
+        <small>Avos e duas parcelas</small>
+      </button>
+      <button id="aba-rescisao" type="button" role="tab" aria-selected="false" aria-controls="calculadora-rescisao" tabindex="-1" data-calculadora-aba="rescisao">
+        <span aria-hidden="true">${ICONES.balanca}</span>
+        <strong>Rescisão CLT</strong>
+        <small>Verbas diretas e FGTS</small>
+      </button>
+    </div>
+
+    <section class="calculadora-painel" id="calculadora-custo" role="tabpanel" aria-labelledby="aba-custo" data-calculadora-painel="custo">
+      <div class="calculadora-painel__cabeca">
+        <p class="secao__olho">Planejamento da vaga</p>
+        <h2>Quanto custa contratar pela CLT?</h2>
+        <p>Compare o desembolso de um mês normal com o custo médio mensal, que reserva 13º e o adicional de 1/3 das férias.</p>
+      </div>
+      <div class="calculadora-corpo">
+        <form class="calculadora-form" data-calculadora-form="custo" novalidate>
+          ${resumoErros}
+          <fieldset class="calculadora-grupo">
+            <legend>Remuneração e benefícios</legend>
+            <div class="calculadora-campos calculadora-campos--dois">
+              <div class="campo">
+                <label for="custo-salario">Salário mensal <span class="campo__obrigatorio">(obrigatório)</span></label>
+                <div class="campo-moeda"><span>R$</span><input id="custo-salario" name="salario" type="text" inputmode="decimal" placeholder="3.000,00" aria-describedby="custo-salario-dica custo-salario-erro" data-numero required></div>
+                <p class="campo__dica" id="custo-salario-dica">Use o salário contratual, sem descontar INSS ou vale-transporte.</p>
+                <p class="campo__erro" id="custo-salario-erro" data-erro-campo="salario" hidden></p>
+              </div>
+              <div class="campo">
+                <label for="custo-beneficios">Benefícios pagos pela empresa <span class="campo__opcional">(por mês)</span></label>
+                <div class="campo-moeda"><span>R$</span><input id="custo-beneficios" name="beneficios" type="text" inputmode="decimal" placeholder="0,00" aria-describedby="custo-beneficios-dica custo-beneficios-erro" data-numero></div>
+                <p class="campo__dica" id="custo-beneficios-dica">Some vale-alimentação, plano de saúde e outros custos integrais da empresa.</p>
+                <p class="campo__erro" id="custo-beneficios-erro" data-erro-campo="beneficios" hidden></p>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset class="calculadora-grupo">
+            <legend>Enquadramento do empregador</legend>
+            <div class="campo">
+              <label for="custo-regime">Como a contribuição patronal é recolhida?</label>
+              <select id="custo-regime" name="regime" data-custo-regime>
+                <option value="simples">Simples Nacional — CPP incluída no DAS</option>
+                <option value="simples4">Simples Nacional — atividade do Anexo IV</option>
+                <option value="normal">Lucro Presumido ou Lucro Real</option>
+                <option value="domestico">Empregador doméstico — DAE</option>
+              </select>
+              <p class="campo__dica">Se houver dúvida sobre o anexo ou o CNAE, confirme com a contabilidade antes de usar o valor.</p>
+            </div>
+            <div class="calculadora-campos calculadora-campos--dois" data-custo-variaveis>
+              <div class="campo" data-custo-campo="rat" hidden>
+                <label for="custo-rat">RAT antes do FAP</label>
+                <select id="custo-rat" name="rat">
+                  <option value="0.01">1%</option>
+                  <option value="0.02">2%</option>
+                  <option value="0.03">3%</option>
+                </select>
+              </div>
+              <div class="campo" data-custo-campo="terceiros" hidden>
+                <label for="custo-terceiros">Terceiros / Sistema S</label>
+                <div class="campo-sufixo"><input id="custo-terceiros" name="terceiros" type="number" inputmode="decimal" min="0" max="15" step="0.1" value="5.8"><span>%</span></div>
+                <p class="campo__dica">A alíquota varia pelo FPAS e código de terceiros.</p>
+              </div>
+            </div>
+            <label class="caixa-marcar" data-custo-campo="provisao">
+              <input type="checkbox" name="provisaoRescisao">
+              <span>Reservar também 3,2% para uma futura multa de 40% do FGTS</span>
+            </label>
+          </fieldset>
+          <div class="calculadora-form__acoes">
+            <button class="botao botao--principal" type="submit">Calcular custo</button>
+            <button class="botao botao--fantasma" type="reset">Limpar</button>
+          </div>
+        </form>
+        ${resultadoVazio('Seu custo aparecerá aqui', 'Preencha o salário, escolha o enquadramento e clique em calcular.')}
+      </div>
+    </section>
+
+    <section class="calculadora-painel" id="calculadora-ferias" role="tabpanel" aria-labelledby="aba-ferias" data-calculadora-painel="ferias" hidden>
+      <div class="calculadora-painel__cabeca">
+        <p class="secao__olho">Pagamento antes do descanso</p>
+        <h2>Quanto pagar de férias?</h2>
+        <p>Estime a remuneração do período, o terço constitucional, o abono pecuniário e a antecipação da primeira parcela do 13º.</p>
+      </div>
+      <div class="calculadora-corpo">
+        <form class="calculadora-form" data-calculadora-form="ferias" novalidate>
+          ${resumoErros}
+          <fieldset class="calculadora-grupo">
+            <legend>Base das férias</legend>
+            <div class="calculadora-campos calculadora-campos--dois">
+              <div class="campo">
+                <label for="ferias-salario">Salário mensal <span class="campo__obrigatorio">(obrigatório)</span></label>
+                <div class="campo-moeda"><span>R$</span><input id="ferias-salario" name="salario" type="text" inputmode="decimal" placeholder="3.000,00" aria-describedby="ferias-salario-erro" data-numero required></div>
+                <p class="campo__erro" id="ferias-salario-erro" data-erro-campo="salario" hidden></p>
+              </div>
+              <div class="campo">
+                <label for="ferias-medias">Médias e adicionais habituais <span class="campo__opcional">(mensais)</span></label>
+                <div class="campo-moeda"><span>R$</span><input id="ferias-medias" name="medias" type="text" inputmode="decimal" placeholder="0,00" aria-describedby="ferias-medias-dica ferias-medias-erro" data-numero></div>
+                <p class="campo__dica" id="ferias-medias-dica">Horas extras, adicional noturno, insalubridade, periculosidade e comissões, conforme a média aplicável.</p>
+                <p class="campo__erro" id="ferias-medias-erro" data-erro-campo="medias" hidden></p>
+              </div>
+            </div>
+            <div class="campo">
+              <label for="ferias-dias">Dias de férias adquiridos</label>
+              <select id="ferias-dias" name="dias">
+                <option value="30">30 dias — até 5 faltas injustificadas</option>
+                <option value="24">24 dias — de 6 a 14 faltas</option>
+                <option value="18">18 dias — de 15 a 23 faltas</option>
+                <option value="12">12 dias — de 24 a 32 faltas</option>
+              </select>
+            </div>
+          </fieldset>
+          <fieldset class="calculadora-grupo">
+            <legend>Opções do pagamento</legend>
+            <label class="caixa-marcar"><input type="checkbox" name="abono"><span>O empregado pediu para converter 1/3 das férias em abono pecuniário</span></label>
+            <label class="caixa-marcar"><input type="checkbox" name="adiantamento13"><span>Antecipar também a primeira parcela estimada do 13º</span></label>
+          </fieldset>
+          <div class="calculadora-form__acoes">
+            <button class="botao botao--principal" type="submit">Calcular férias</button>
+            <button class="botao botao--fantasma" type="reset">Limpar</button>
+          </div>
+        </form>
+        ${resultadoVazio('O recibo estimado aparecerá aqui', 'O resultado separa férias, 1/3, abono e eventual adiantamento do 13º.')}
+      </div>
+    </section>
+
+    <section class="calculadora-painel" id="calculadora-decimo" role="tabpanel" aria-labelledby="aba-decimo" data-calculadora-painel="decimo" hidden>
+      <div class="calculadora-painel__cabeca">
+        <p class="secao__olho">Gratificação natalina</p>
+        <h2>Quanto pagar de 13º salário?</h2>
+        <p>Calcule os avos do ano e veja uma divisão inicial entre primeira e segunda parcelas, antes dos descontos legais.</p>
+      </div>
+      <div class="calculadora-corpo">
+        <form class="calculadora-form" data-calculadora-form="decimo" novalidate>
+          ${resumoErros}
+          <fieldset class="calculadora-grupo">
+            <legend>Base do 13º</legend>
+            <div class="calculadora-campos calculadora-campos--dois">
+              <div class="campo">
+                <label for="decimo-salario">Salário de referência <span class="campo__obrigatorio">(obrigatório)</span></label>
+                <div class="campo-moeda"><span>R$</span><input id="decimo-salario" name="salario" type="text" inputmode="decimal" placeholder="3.000,00" aria-describedby="decimo-salario-erro" data-numero required></div>
+                <p class="campo__erro" id="decimo-salario-erro" data-erro-campo="salario" hidden></p>
+              </div>
+              <div class="campo">
+                <label for="decimo-medias">Médias e parcelas variáveis <span class="campo__opcional">(mensais)</span></label>
+                <div class="campo-moeda"><span>R$</span><input id="decimo-medias" name="medias" type="text" inputmode="decimal" placeholder="0,00" aria-describedby="decimo-medias-dica decimo-medias-erro" data-numero></div>
+                <p class="campo__dica" id="decimo-medias-dica">Use a média apurada para horas extras, adicionais ou comissões.</p>
+                <p class="campo__erro" id="decimo-medias-erro" data-erro-campo="medias" hidden></p>
+              </div>
+            </div>
+            <div class="campo">
+              <label for="decimo-avos">Meses com pelo menos 15 dias de trabalho no ano</label>
+              <select id="decimo-avos" name="avos">
+                ${Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}"${i === 11 ? ' selected' : ''}>${i + 1}/12 ${i === 0 ? 'avo' : 'avos'}</option>`).join('')}
+              </select>
+            </div>
+          </fieldset>
+          <div class="calculadora-form__acoes">
+            <button class="botao botao--principal" type="submit">Calcular 13º</button>
+            <button class="botao botao--fantasma" type="reset">Limpar</button>
+          </div>
+        </form>
+        ${resultadoVazio('O 13º estimado aparecerá aqui', 'A memória mostrará o direito total e uma divisão inicial das duas parcelas.')}
+      </div>
+    </section>
+
+    <section class="calculadora-painel" id="calculadora-rescisao" role="tabpanel" aria-labelledby="aba-rescisao" data-calculadora-painel="rescisao" hidden>
+      <div class="calculadora-painel__cabeca">
+        <p class="secao__olho">Contrato por prazo indeterminado</p>
+        <h2>Quanto pode custar uma rescisão CLT?</h2>
+        <p>Estime as verbas pagas ao empregado e, em separado, os recolhimentos de FGTS. Esta versão não calcula justa causa nem rescisão indireta.</p>
+      </div>
+      <div class="calculadora-corpo">
+        <form class="calculadora-form" data-calculadora-form="rescisao" novalidate>
+          ${resumoErros}
+          <fieldset class="calculadora-grupo">
+            <legend>Contrato e desligamento</legend>
+            <div class="campo">
+              <label for="rescisao-modalidade">Modalidade do desligamento</label>
+              <select id="rescisao-modalidade" name="modalidade" data-rescisao-modalidade>
+                <option value="dispensa">Dispensa sem justa causa pelo empregador</option>
+                <option value="pedido">Pedido de demissão</option>
+                <option value="acordo">Acordo entre empregado e empregador — art. 484-A</option>
+                <option value="termino">Término normal de contrato por prazo determinado</option>
+              </select>
+            </div>
+            <div class="calculadora-campos calculadora-campos--dois">
+              <div class="campo">
+                <label for="rescisao-admissao">Data de admissão <span class="campo__obrigatorio">(obrigatório)</span></label>
+                <input id="rescisao-admissao" name="admissao" type="date" aria-describedby="rescisao-admissao-erro" required>
+                <p class="campo__erro" id="rescisao-admissao-erro" data-erro-campo="admissao" hidden></p>
+              </div>
+              <div class="campo">
+                <label for="rescisao-data">Comunicação ou último dia trabalhado <span class="campo__obrigatorio">(obrigatório)</span></label>
+                <input id="rescisao-data" name="dataSaida" type="date" aria-describedby="rescisao-data-dica rescisao-data-erro" required>
+                <p class="campo__dica" id="rescisao-data-dica">No aviso indenizado, informe o dia da comunicação; no trabalhado, o último dia.</p>
+                <p class="campo__erro" id="rescisao-data-erro" data-erro-campo="dataSaida" hidden></p>
+              </div>
+            </div>
+            <div class="campo" data-rescisao-campo="aviso">
+              <label for="rescisao-aviso">Como fica o aviso prévio?</label>
+              <select id="rescisao-aviso" name="aviso" data-rescisao-aviso></select>
+            </div>
+          </fieldset>
+          <fieldset class="calculadora-grupo">
+            <legend>Remuneração</legend>
+            <div class="calculadora-campos calculadora-campos--dois">
+              <div class="campo">
+                <label for="rescisao-salario">Salário mensal <span class="campo__obrigatorio">(obrigatório)</span></label>
+                <div class="campo-moeda"><span>R$</span><input id="rescisao-salario" name="salario" type="text" inputmode="decimal" placeholder="3.000,00" aria-describedby="rescisao-salario-erro" data-numero required></div>
+                <p class="campo__erro" id="rescisao-salario-erro" data-erro-campo="salario" hidden></p>
+              </div>
+              <div class="campo">
+                <label for="rescisao-medias">Médias e adicionais habituais <span class="campo__opcional">(mensais)</span></label>
+                <div class="campo-moeda"><span>R$</span><input id="rescisao-medias" name="medias" type="text" inputmode="decimal" placeholder="0,00" aria-describedby="rescisao-medias-erro" data-numero></div>
+                <p class="campo__erro" id="rescisao-medias-erro" data-erro-campo="medias" hidden></p>
+              </div>
+              <div class="campo">
+                <label for="rescisao-dias">Dias remunerados no mês da saída</label>
+                <input id="rescisao-dias" name="diasSaldo" type="number" inputmode="numeric" min="0" max="30" value="0" aria-describedby="rescisao-dias-dica rescisao-dias-erro">
+                <p class="campo__dica" id="rescisao-dias-dica">A sugestão é preenchida pela data e pode ser corrigida por faltas ou outras ocorrências.</p>
+                <p class="campo__erro" id="rescisao-dias-erro" data-erro-campo="diasSaldo" hidden></p>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset class="calculadora-grupo">
+            <legend>Avos e períodos de férias</legend>
+            <div class="calculadora-campos calculadora-campos--dois">
+              <div class="campo">
+                <label for="rescisao-avos13">Avos de 13º ainda não pagos</label>
+                <input id="rescisao-avos13" name="avos13" type="number" inputmode="numeric" min="0" max="12" value="0" aria-describedby="rescisao-avos13-dica rescisao-avos13-erro">
+                <p class="campo__dica" id="rescisao-avos13-dica">Conta-se 1/12 por mês com 15 dias ou mais, inclusive a projeção do aviso.</p>
+                <p class="campo__erro" id="rescisao-avos13-erro" data-erro-campo="avos13" hidden></p>
+              </div>
+              <div class="campo">
+                <label for="rescisao-avos-ferias">Avos de férias proporcionais</label>
+                <input id="rescisao-avos-ferias" name="avosFerias" type="number" inputmode="numeric" min="0" max="12" value="0" aria-describedby="rescisao-avos-ferias-dica rescisao-avos-ferias-erro">
+                <p class="campo__dica" id="rescisao-avos-ferias-dica">Conta-se 1/12 por mês ou fração superior a 14 dias no período aquisitivo.</p>
+                <p class="campo__erro" id="rescisao-avos-ferias-erro" data-erro-campo="avosFerias" hidden></p>
+              </div>
+              <div class="campo">
+                <label for="rescisao-ferias-simples">Períodos adquiridos e não gozados</label>
+                <input id="rescisao-ferias-simples" name="feriasSimples" type="number" inputmode="numeric" min="0" max="5" value="0" aria-describedby="rescisao-ferias-simples-erro">
+                <p class="campo__erro" id="rescisao-ferias-simples-erro" data-erro-campo="feriasSimples" hidden></p>
+              </div>
+              <div class="campo">
+                <label for="rescisao-ferias-dobro">Períodos cujo prazo concessivo venceu</label>
+                <input id="rescisao-ferias-dobro" name="feriasDobro" type="number" inputmode="numeric" min="0" max="5" value="0" aria-describedby="rescisao-ferias-dobro-dica rescisao-ferias-dobro-erro">
+                <p class="campo__dica" id="rescisao-ferias-dobro-dica">Esses períodos são estimados em dobro, com o terço correspondente.</p>
+                <p class="campo__erro" id="rescisao-ferias-dobro-erro" data-erro-campo="feriasDobro" hidden></p>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset class="calculadora-grupo">
+            <legend>FGTS</legend>
+            <div class="campo">
+              <label for="rescisao-fgts">Saldo do FGTS antes dos depósitos rescisórios <span class="campo__opcional">(opcional)</span></label>
+              <div class="campo-moeda"><span>R$</span><input id="rescisao-fgts" name="saldoFgts" type="text" inputmode="decimal" placeholder="0,00" aria-describedby="rescisao-fgts-dica rescisao-fgts-erro" data-numero></div>
+              <p class="campo__dica" id="rescisao-fgts-dica">Use o extrato para estimar a multa. Sem saldo informado, a memória mostrará apenas o FGTS das verbas rescisórias.</p>
+              <p class="campo__erro" id="rescisao-fgts-erro" data-erro-campo="saldoFgts" hidden></p>
+            </div>
+          </fieldset>
+          <div class="calculadora-form__acoes">
+            <button class="botao botao--principal" type="submit">Calcular rescisão</button>
+            <button class="botao botao--fantasma" type="reset">Limpar</button>
+          </div>
+        </form>
+        ${resultadoVazio('A estimativa da rescisão aparecerá aqui', 'O resultado separa o pagamento direto ao empregado dos depósitos de FGTS.')}
+      </div>
+    </section>
+  </div>
+</section>
+
+<section class="secao secao--clara calculadoras-limites">
+  <div class="conteiner calculadoras-limites__grade">
+    <div>
+      <p class="secao__olho">Antes de usar o resultado</p>
+      <h2 class="secao__titulo">O que estas contas não conseguem enxergar</h2>
+      <p>Convenções coletivas, pisos, estabilidade, afastamentos, faltas, remuneração variável, adicionais, jornadas especiais, incidências tributárias e lançamentos anteriores podem alterar o valor. A rescisão também pode exigir parcelas que não aparecem nesta versão.</p>
+    </div>
+    <ul class="lista-marcada">
+      <li>Valores brutos, antes de INSS e imposto de renda</li>
+      <li>Arredondamento final para centavos</li>
+      <li>Dados processados somente no seu navegador</li>
+      <li>Regras gerais conferidas em 22 de agosto de 2026</li>
+    </ul>
+  </div>
+</section>
+
+<section class="secao calculadoras-fontes">
+  <div class="conteiner conteiner--estreito prosa">
+    <h2>Fontes usadas nas fórmulas</h2>
+    <p>As fórmulas se apoiam na <a href="https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm">CLT</a>, especialmente nas regras de férias e aviso prévio; na <a href="https://www.planalto.gov.br/ccivil_03/leis/l4090.htm">Lei nº 4.090/1962</a>, sobre o 13º; na <a href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12506.htm">Lei nº 12.506/2011</a>, sobre o aviso proporcional; e na <a href="https://www.planalto.gov.br/ccivil_03/leis/l8036compilada.htm">Lei nº 8.036/1990</a>, sobre FGTS e indenização rescisória.</p>
+    <p>Para o custo de contratação, também são considerados o tratamento da CPP no <a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm">Simples Nacional</a> e a composição oficial do <a href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/restituicao-ressarcimento-reembolso-e-compensacao/restituicao/pagamento-indevido-ou-a-maior/esocial">DAE do empregador doméstico</a>.</p>
+  </div>
+</section>
+
+${chamadaContato('calculadoras trabalhistas')}
 `,
   });
 }
@@ -1069,6 +1445,7 @@ function construir() {
 
   publicar('/', paginaInicial(artigos));
   for (const t of Object.values(TRILHAS)) publicar(t.caminho, paginaTrilha(t, artigos));
+  publicar('/calculadoras/', paginaCalculadoras());
   publicar('/conteudo/', paginaConteudo(artigos));
   publicar('/sobre/', paginaSobre());
   publicar('/contato/', paginaContato());
