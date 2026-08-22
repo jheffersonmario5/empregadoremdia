@@ -1211,6 +1211,7 @@ tbody tr:nth-child(even) { background: color-mix(in srgb, var(--superficie-2) 55
 }
 .calculadora-campos { display: grid; gap: 1rem; min-width: 0; }
 .calculadora-campos--dois { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.calculadora-campos > .campo { align-content: start; }
 .calculadora-campos > .campo:only-child { grid-column: 1 / -1; }
 
 .campo-moeda, .campo-sufixo {
