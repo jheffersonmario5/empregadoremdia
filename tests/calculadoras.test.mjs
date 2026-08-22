@@ -7,6 +7,7 @@ import {
   calcularFerias,
   calcularDecimoTerceiro,
   diasAvisoPrevio,
+  limiteDiasRescisao,
   calcularRescisao,
 } from '../assets/calculadoras.js';
 
@@ -85,4 +86,11 @@ test('pedido de demissão sem aviso não gera pagamento direto negativo', () => 
   assert.equal(calculo.totalDiretoAntesDoLimite, -2800);
   assert.equal(calculo.ajustePagamentoNegativo, 2800);
   assert.equal(calculo.totalDireto, 0);
+});
+
+test('limite de dias remunerados acompanha a data da saída e aceita o dia 31', () => {
+  assert.equal(limiteDiasRescisao('2026-08-20'), 20);
+  assert.equal(limiteDiasRescisao('2026-08-31'), 31);
+  assert.equal(limiteDiasRescisao('2026-02-28'), 28);
+  assert.equal(limiteDiasRescisao(''), 31);
 });

@@ -321,7 +321,7 @@ function mensagemCampo(campo) {
   if (campo.required && !valor) return 'Preencha este campo.';
   if (campo.matches('[data-numero]')) {
     const numero = numeroBrasileiro(valor);
-    if (valor && !Number.isFinite(numero)) return 'Informe um valor válido, como 3.000,00.';
+    if (valor && !Number.isFinite(numero)) return 'Informe um valor válido, como 1.621,00.';
     if (campo.required && numero <= 0) return 'Informe um valor maior que zero.';
     if (!campo.required && Number.isFinite(numero) && numero < 0) return 'O valor não pode ser negativo.';
   }
@@ -345,6 +345,7 @@ function marcarCampo(form, campo, mensagem) {
 }
 
 function validarFormulario(form) {
+  if (form.dataset.calculadoraForm === 'rescisao') atualizarLimiteDiasRescisao(form);
   const campos = Array.from(form.querySelectorAll('input:not([type="checkbox"]), select'))
     .filter((campo) => !campo.disabled && !campo.closest('[hidden]'));
   const erros = [];
@@ -622,13 +623,13 @@ function calcularFormularioRescisao(form, resultado) {
   }
   if (calculo.feriasSimplesBase) {
     verbas.push(
-      { rotulo: 'Férias adquiridas e não gozadas', valor: calculo.feriasSimplesBase },
-      { rotulo: '1/3 sobre férias adquiridas', valor: calculo.feriasSimplesTerco }
+      { rotulo: 'Férias completas ainda não tiradas', valor: calculo.feriasSimplesBase },
+      { rotulo: '1/3 correspondente', valor: calculo.feriasSimplesTerco }
     );
   }
   if (calculo.feriasDobroBase) {
     verbas.push(
-      { rotulo: 'Férias após o prazo concessivo — em dobro', valor: calculo.feriasDobroBase },
+      { rotulo: 'Férias não concedidas no prazo — em dobro', valor: calculo.feriasDobroBase },
       { rotulo: '1/3 correspondente', valor: calculo.feriasDobroTerco }
     );
   }
@@ -714,12 +715,24 @@ function atualizarAvisoRescisao(form) {
   form.querySelector('[data-rescisao-campo="aviso"]').hidden = modalidade === 'termino';
 }
 
+export function limiteDiasRescisao(valorDataSaida) {
+  const saida = valorDataSaida instanceof Date ? valorDataSaida : dataIso(valorDataSaida);
+  return saida ? saida.getUTCDate() : 31;
+}
+
+function atualizarLimiteDiasRescisao(form) {
+  const campo = form.elements.diasSaldo;
+  const limite = limiteDiasRescisao(form.elements.dataSaida.value);
+  campo.max = String(limite);
+  return limite;
+}
+
 function sugerirRescisao(form) {
   const admissao = dataIso(form.elements.admissao.value);
   const saida = dataIso(form.elements.dataSaida.value);
+  const limiteDias = atualizarLimiteDiasRescisao(form);
   if (!saida) return;
-  const ultimoDia = new Date(Date.UTC(saida.getUTCFullYear(), saida.getUTCMonth() + 1, 0)).getUTCDate();
-  form.elements.diasSaldo.value = saida.getUTCDate() === ultimoDia ? 30 : Math.min(30, saida.getUTCDate());
+  form.elements.diasSaldo.value = limiteDias;
   if (!admissao || admissao > saida) return;
 
   const modalidade = form.elements.modalidade.value;
@@ -785,7 +798,10 @@ function prepararFormulario(form) {
       resumo.hidden = true;
       resultado.innerHTML = resultado._htmlInicial;
       if (tipo === 'custo') atualizarCamposCusto(form);
-      if (tipo === 'rescisao') atualizarAvisoRescisao(form);
+      if (tipo === 'rescisao') {
+        atualizarAvisoRescisao(form);
+        atualizarLimiteDiasRescisao(form);
+      }
     }, 0);
   });
 }

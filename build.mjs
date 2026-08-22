@@ -774,7 +774,7 @@ function paginaCalculadoras() {
             <div class="calculadora-campos calculadora-campos--dois">
               <div class="campo">
                 <label for="custo-salario">Salário mensal <span class="campo__obrigatorio">(obrigatório)</span></label>
-                <div class="campo-moeda"><span>R$</span><input id="custo-salario" name="salario" type="text" inputmode="decimal" placeholder="3.000,00" aria-describedby="custo-salario-dica custo-salario-erro" data-numero required></div>
+                <div class="campo-moeda"><span>R$</span><input id="custo-salario" name="salario" type="text" inputmode="decimal" placeholder="1.621,00" aria-describedby="custo-salario-dica custo-salario-erro" data-numero required></div>
                 <p class="campo__dica" id="custo-salario-dica">Use o salário contratual, sem descontar INSS ou vale-transporte.</p>
                 <p class="campo__erro" id="custo-salario-erro" data-erro-campo="salario" hidden></p>
               </div>
@@ -841,7 +841,7 @@ function paginaCalculadoras() {
             <div class="calculadora-campos calculadora-campos--dois">
               <div class="campo">
                 <label for="ferias-salario">Salário mensal <span class="campo__obrigatorio">(obrigatório)</span></label>
-                <div class="campo-moeda"><span>R$</span><input id="ferias-salario" name="salario" type="text" inputmode="decimal" placeholder="3.000,00" aria-describedby="ferias-salario-erro" data-numero required></div>
+                <div class="campo-moeda"><span>R$</span><input id="ferias-salario" name="salario" type="text" inputmode="decimal" placeholder="1.621,00" aria-describedby="ferias-salario-erro" data-numero required></div>
                 <p class="campo__erro" id="ferias-salario-erro" data-erro-campo="salario" hidden></p>
               </div>
               <div class="campo">
@@ -889,7 +889,7 @@ function paginaCalculadoras() {
             <div class="calculadora-campos calculadora-campos--dois">
               <div class="campo">
                 <label for="decimo-salario">Salário de referência <span class="campo__obrigatorio">(obrigatório)</span></label>
-                <div class="campo-moeda"><span>R$</span><input id="decimo-salario" name="salario" type="text" inputmode="decimal" placeholder="3.000,00" aria-describedby="decimo-salario-erro" data-numero required></div>
+                <div class="campo-moeda"><span>R$</span><input id="decimo-salario" name="salario" type="text" inputmode="decimal" placeholder="1.621,00" aria-describedby="decimo-salario-erro" data-numero required></div>
                 <p class="campo__erro" id="decimo-salario-erro" data-erro-campo="salario" hidden></p>
               </div>
               <div class="campo">
@@ -958,7 +958,7 @@ function paginaCalculadoras() {
             <div class="calculadora-campos calculadora-campos--dois">
               <div class="campo">
                 <label for="rescisao-salario">Salário mensal <span class="campo__obrigatorio">(obrigatório)</span></label>
-                <div class="campo-moeda"><span>R$</span><input id="rescisao-salario" name="salario" type="text" inputmode="decimal" placeholder="3.000,00" aria-describedby="rescisao-salario-erro" data-numero required></div>
+                <div class="campo-moeda"><span>R$</span><input id="rescisao-salario" name="salario" type="text" inputmode="decimal" placeholder="1.621,00" aria-describedby="rescisao-salario-erro" data-numero required></div>
                 <p class="campo__erro" id="rescisao-salario-erro" data-erro-campo="salario" hidden></p>
               </div>
               <div class="campo">
@@ -968,36 +968,37 @@ function paginaCalculadoras() {
               </div>
               <div class="campo">
                 <label for="rescisao-dias">Dias remunerados no mês da saída</label>
-                <input id="rescisao-dias" name="diasSaldo" type="number" inputmode="numeric" min="0" max="30" value="0" aria-describedby="rescisao-dias-dica rescisao-dias-erro">
-                <p class="campo__dica" id="rescisao-dias-dica">A sugestão é preenchida pela data e pode ser corrigida por faltas ou outras ocorrências.</p>
+                <input id="rescisao-dias" name="diasSaldo" type="number" inputmode="numeric" min="0" max="31" value="0" aria-describedby="rescisao-dias-dica rescisao-dias-erro">
+                <p class="campo__dica" id="rescisao-dias-dica">O sistema usa o dia do mês informado acima como limite. Reduza o número se houver faltas não remuneradas ou outra ocorrência.</p>
                 <p class="campo__erro" id="rescisao-dias-erro" data-erro-campo="diasSaldo" hidden></p>
               </div>
             </div>
           </fieldset>
           <fieldset class="calculadora-grupo">
-            <legend>Avos e períodos de férias</legend>
+            <legend>13º e férias na rescisão</legend>
             <div class="calculadora-campos calculadora-campos--dois">
               <div class="campo">
-                <label for="rescisao-avos13">Avos de 13º ainda não pagos</label>
+                <label for="rescisao-avos13">Meses que contam para o 13º ainda não pago</label>
                 <input id="rescisao-avos13" name="avos13" type="number" inputmode="numeric" min="0" max="12" value="0" aria-describedby="rescisao-avos13-dica rescisao-avos13-erro">
                 <p class="campo__dica" id="rescisao-avos13-dica">Conta-se 1/12 por mês com 15 dias ou mais, inclusive a projeção do aviso.</p>
                 <p class="campo__erro" id="rescisao-avos13-erro" data-erro-campo="avos13" hidden></p>
               </div>
               <div class="campo">
-                <label for="rescisao-avos-ferias">Avos de férias proporcionais</label>
+                <label for="rescisao-avos-ferias">Meses que contam para as férias proporcionais</label>
                 <input id="rescisao-avos-ferias" name="avosFerias" type="number" inputmode="numeric" min="0" max="12" value="0" aria-describedby="rescisao-avos-ferias-dica rescisao-avos-ferias-erro">
                 <p class="campo__dica" id="rescisao-avos-ferias-dica">Conta-se 1/12 por mês ou fração superior a 14 dias no período aquisitivo.</p>
                 <p class="campo__erro" id="rescisao-avos-ferias-erro" data-erro-campo="avosFerias" hidden></p>
               </div>
               <div class="campo">
-                <label for="rescisao-ferias-simples">Períodos adquiridos e não gozados</label>
-                <input id="rescisao-ferias-simples" name="feriasSimples" type="number" inputmode="numeric" min="0" max="5" value="0" aria-describedby="rescisao-ferias-simples-erro">
+                <label for="rescisao-ferias-simples">Férias completas ainda não tiradas</label>
+                <input id="rescisao-ferias-simples" name="feriasSimples" type="number" inputmode="numeric" min="0" max="5" value="0" aria-describedby="rescisao-ferias-simples-dica rescisao-ferias-simples-erro">
+                <p class="campo__dica" id="rescisao-ferias-simples-dica">Informe quantos períodos de 12 meses de trabalho já foram completados, mas as férias ainda não foram tiradas. Ex.: completou 1 ano e ainda não saiu de férias: informe 1.</p>
                 <p class="campo__erro" id="rescisao-ferias-simples-erro" data-erro-campo="feriasSimples" hidden></p>
               </div>
               <div class="campo">
-                <label for="rescisao-ferias-dobro">Períodos cujo prazo concessivo venceu</label>
+                <label for="rescisao-ferias-dobro">Férias não concedidas dentro do prazo</label>
                 <input id="rescisao-ferias-dobro" name="feriasDobro" type="number" inputmode="numeric" min="0" max="5" value="0" aria-describedby="rescisao-ferias-dobro-dica rescisao-ferias-dobro-erro">
-                <p class="campo__dica" id="rescisao-ferias-dobro-dica">Esses períodos são estimados em dobro, com o terço correspondente.</p>
+                <p class="campo__dica" id="rescisao-ferias-dobro-dica">Depois que o empregado completa 12 meses de trabalho, o empregador tem mais 12 meses para conceder as férias. Informe quantos períodos ultrapassaram também esse segundo prazo; eles serão estimados em dobro.</p>
                 <p class="campo__erro" id="rescisao-ferias-dobro-erro" data-erro-campo="feriasDobro" hidden></p>
               </div>
             </div>
