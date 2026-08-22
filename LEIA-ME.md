@@ -14,6 +14,7 @@ Toda a configuração fica em `conteudo/site.json`.
 | --- | --- |
 | `whatsapp` | `5561991880398` — pronto |
 | `email` | `jheffersonmario6@gmail.com` — pronto |
+| `salarioMinimo` | `R$ 1.621,00` em 2026 — atualizar a cada reajuste anual |
 
 O gerador avisa no terminal se algo ficou pendente.
 
@@ -118,6 +119,8 @@ A página `/calculadoras/` reúne quatro estimativas para o empregador:
 - rescisão CLT, separando o pagamento direto dos recolhimentos de FGTS.
 
 Tudo é calculado no navegador. Os valores digitados não são enviados nem armazenados. As fórmulas puras ficam em `assets/calculadoras.js` e têm testes automatizados em `tests/calculadoras.test.mjs`.
+
+O valor usado no exemplo e no alerta de salário inferior ao mínimo vem de `salarioMinimo` em `conteudo/site.json`. Atualize o valor e o ano no mesmo arquivo quando entrar em vigor um novo salário mínimo nacional.
 
 Os resultados são deliberadamente **brutos**: não tentam simular INSS, imposto de renda ou todas as incidências da folha. Isso evita atrelar a ferramenta a tabelas anuais e deixa explícito que norma coletiva, médias, afastamentos e particularidades do contrato precisam ser conferidos fora da estimativa.
 

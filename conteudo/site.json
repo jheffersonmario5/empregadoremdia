@@ -11,6 +11,11 @@
 
   "atendimento": "Atendimento mediante agendamento prévio.",
 
+  "salarioMinimo": {
+    "valor": 1621,
+    "ano": 2026
+  },
+
   "_github": "Repositório onde o site mora. O painel /publicar/ usa estes dados para gravar os artigos.",
   "github": {
     "usuario": "jheffersonmario5",
@@ -19,7 +24,7 @@
   },
 
   "advogado": {
-    "nome": "Jhefferson Mário de Oliveira",
+    "nome": "Jhéfferson Mário de Oliveira",
     "oab": "OAB/DF 82.715 e OAB/SP 535.570"
   }
 }

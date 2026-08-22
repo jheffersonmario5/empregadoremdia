@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 import {
   numeroBrasileiro,
+  salarioAbaixoMinimo,
   calcularCustoContratacao,
   calcularFerias,
   calcularDecimoTerceiro,
@@ -16,6 +17,13 @@ test('interpreta valores no formato brasileiro', () => {
   assert.equal(numeroBrasileiro('3000.50'), 3000.5);
   assert.equal(numeroBrasileiro('3.000'), 3000);
   assert.equal(numeroBrasileiro(''), 0);
+});
+
+test('identifica salário positivo abaixo do mínimo configurado', () => {
+  assert.equal(salarioAbaixoMinimo('1.000,00', 1621), true);
+  assert.equal(salarioAbaixoMinimo('1.621,00', 1621), false);
+  assert.equal(salarioAbaixoMinimo('2.000,00', 1621), false);
+  assert.equal(salarioAbaixoMinimo('', 1621), false);
 });
 
 test('custo médio no Simples inclui FGTS, 13º e terço de férias sem duplicar o salário de férias', () => {

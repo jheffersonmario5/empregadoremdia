@@ -295,7 +295,7 @@ function rodape() {
     </div>
   </div>
   <div class="conteiner rodape__legal">
-    <p class="rodape__assinatura"><strong>${escapar(site.advogado.nome)}</strong> — ${escapar(site.advogado.oab)}</p>
+    <p class="rodape__assinatura"><strong>${escapar(site.advogado.nome)}</strong><span>${escapar(site.advogado.oab)}</span></p>
     <p>Este site tem caráter exclusivamente informativo, nos termos do Provimento nº 205/2021 do Conselho Federal da OAB. O conteúdo aqui publicado não constitui consulta jurídica, não substitui a análise individualizada de cada caso e não implica garantia de qualquer resultado.</p>
     <p class="rodape__creditos">© ${anoAtual} Empregador em Dia · empregadoremdia.com.br · <a href="/publicar/">Área de publicação</a></p>
   </div>
@@ -692,9 +692,15 @@ ${relacionados.length ? `<section class="secao secao--clara">
 }
 
 function paginaCalculadoras() {
+  const salarioMinimo = Number(site.salarioMinimo?.valor) || 1621;
+  const salarioMinimoTexto = new Intl.NumberFormat('pt-BR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(salarioMinimo);
   const config = JSON.stringify({
     whatsapp: site.whatsapp || '',
     atualizadoEm: '2026-08-22',
+    salarioMinimo,
   });
 
   const resultadoVazio = (titulo, texto) => `<aside class="calculadora-resultado" data-resultado aria-live="polite">
@@ -709,6 +715,8 @@ function paginaCalculadoras() {
     <strong>Revise os campos indicados:</strong>
     <ul></ul>
   </div>`;
+
+  const alertaSalarioMinimo = (id) => `<p class="campo__alerta-minimo" id="${id}-minimo" data-alerta-salario-minimo role="alert" hidden><strong>Atenção:</strong> o salário informado está abaixo do mínimo nacional de R$ ${salarioMinimoTexto}. Verifique a jornada contratada e o piso aplicável. Sem fundamento válido para o valor proporcional, pagar abaixo do mínimo pode gerar diferenças salariais e sério risco de reclamação trabalhista.</p>`;
 
   return pagina({
     titulo: 'Calculadoras trabalhistas para o empregador',
@@ -774,7 +782,8 @@ function paginaCalculadoras() {
             <div class="calculadora-campos calculadora-campos--dois">
               <div class="campo">
                 <label for="custo-salario">Salário mensal <span class="campo__obrigatorio">(obrigatório)</span></label>
-                <div class="campo-moeda"><span>R$</span><input id="custo-salario" name="salario" type="text" inputmode="decimal" placeholder="1.621,00" aria-describedby="custo-salario-dica custo-salario-erro" data-numero required></div>
+                <div class="campo-moeda"><span>R$</span><input id="custo-salario" name="salario" type="text" inputmode="decimal" placeholder="${salarioMinimoTexto}" aria-describedby="custo-salario-minimo custo-salario-dica custo-salario-erro" data-numero required></div>
+                ${alertaSalarioMinimo('custo-salario')}
                 <p class="campo__dica" id="custo-salario-dica">Use o salário contratual, sem descontar INSS ou vale-transporte.</p>
                 <p class="campo__erro" id="custo-salario-erro" data-erro-campo="salario" hidden></p>
               </div>
@@ -841,7 +850,8 @@ function paginaCalculadoras() {
             <div class="calculadora-campos calculadora-campos--dois">
               <div class="campo">
                 <label for="ferias-salario">Salário mensal <span class="campo__obrigatorio">(obrigatório)</span></label>
-                <div class="campo-moeda"><span>R$</span><input id="ferias-salario" name="salario" type="text" inputmode="decimal" placeholder="1.621,00" aria-describedby="ferias-salario-erro" data-numero required></div>
+                <div class="campo-moeda"><span>R$</span><input id="ferias-salario" name="salario" type="text" inputmode="decimal" placeholder="${salarioMinimoTexto}" aria-describedby="ferias-salario-minimo ferias-salario-erro" data-numero required></div>
+                ${alertaSalarioMinimo('ferias-salario')}
                 <p class="campo__erro" id="ferias-salario-erro" data-erro-campo="salario" hidden></p>
               </div>
               <div class="campo">
@@ -889,7 +899,8 @@ function paginaCalculadoras() {
             <div class="calculadora-campos calculadora-campos--dois">
               <div class="campo">
                 <label for="decimo-salario">Salário de referência <span class="campo__obrigatorio">(obrigatório)</span></label>
-                <div class="campo-moeda"><span>R$</span><input id="decimo-salario" name="salario" type="text" inputmode="decimal" placeholder="1.621,00" aria-describedby="decimo-salario-erro" data-numero required></div>
+                <div class="campo-moeda"><span>R$</span><input id="decimo-salario" name="salario" type="text" inputmode="decimal" placeholder="${salarioMinimoTexto}" aria-describedby="decimo-salario-minimo decimo-salario-erro" data-numero required></div>
+                ${alertaSalarioMinimo('decimo-salario')}
                 <p class="campo__erro" id="decimo-salario-erro" data-erro-campo="salario" hidden></p>
               </div>
               <div class="campo">
@@ -958,7 +969,8 @@ function paginaCalculadoras() {
             <div class="calculadora-campos calculadora-campos--dois">
               <div class="campo">
                 <label for="rescisao-salario">Salário mensal <span class="campo__obrigatorio">(obrigatório)</span></label>
-                <div class="campo-moeda"><span>R$</span><input id="rescisao-salario" name="salario" type="text" inputmode="decimal" placeholder="1.621,00" aria-describedby="rescisao-salario-erro" data-numero required></div>
+                <div class="campo-moeda"><span>R$</span><input id="rescisao-salario" name="salario" type="text" inputmode="decimal" placeholder="${salarioMinimoTexto}" aria-describedby="rescisao-salario-minimo rescisao-salario-erro" data-numero required></div>
+                ${alertaSalarioMinimo('rescisao-salario')}
                 <p class="campo__erro" id="rescisao-salario-erro" data-erro-campo="salario" hidden></p>
               </div>
               <div class="campo">
@@ -1043,7 +1055,7 @@ function paginaCalculadoras() {
   <div class="conteiner conteiner--estreito prosa">
     <h2>Fontes usadas nas fórmulas</h2>
     <p>As fórmulas se apoiam na <a href="https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm">CLT</a>, especialmente nas regras de férias e aviso prévio; na <a href="https://www.planalto.gov.br/ccivil_03/leis/l4090.htm">Lei nº 4.090/1962</a>, sobre o 13º; na <a href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12506.htm">Lei nº 12.506/2011</a>, sobre o aviso proporcional; e na <a href="https://www.planalto.gov.br/ccivil_03/leis/l8036compilada.htm">Lei nº 8.036/1990</a>, sobre FGTS e indenização rescisória.</p>
-    <p>Para o custo de contratação, também são considerados o tratamento da CPP no <a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm">Simples Nacional</a> e a composição oficial do <a href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/restituicao-ressarcimento-reembolso-e-compensacao/restituicao/pagamento-indevido-ou-a-maior/esocial">DAE do empregador doméstico</a>.</p>
+    <p>Para o custo de contratação, também são considerados o tratamento da CPP no <a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm">Simples Nacional</a>, a composição oficial do <a href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/restituicao-ressarcimento-reembolso-e-compensacao/restituicao/pagamento-indevido-ou-a-maior/esocial">DAE do empregador doméstico</a> e o <a href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12797.htm">Decreto nº 12.797/2025</a>, que fixou o salário mínimo nacional de 2026.</p>
   </div>
 </section>
 

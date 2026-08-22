@@ -30,6 +30,12 @@ export function numeroBrasileiro(valor) {
   return Number.isFinite(numero) ? numero : NaN;
 }
 
+export function salarioAbaixoMinimo(valor, minimo = 1621) {
+  const salario = typeof valor === 'number' ? valor : numeroBrasileiro(valor);
+  const piso = Number(minimo);
+  return Number.isFinite(salario) && Number.isFinite(piso) && salario > 0 && salario < piso;
+}
+
 export function calcularCustoContratacao({
   salario,
   beneficios = 0,
@@ -342,6 +348,14 @@ function marcarCampo(form, campo, mensagem) {
     erro.hidden = !mensagem;
   }
   return !mensagem;
+}
+
+function atualizarAlertaSalarioMinimo(form) {
+  const campo = form.elements.salario;
+  const alerta = form.querySelector('[data-alerta-salario-minimo]');
+  if (!campo || !alerta) return;
+  const cfg = window.EED_CALCULADORAS || {};
+  alerta.hidden = !salarioAbaixoMinimo(campo.value, cfg.salarioMinimo || 1621);
 }
 
 function validarFormulario(form) {
@@ -765,6 +779,15 @@ function prepararFormulario(form) {
     });
   });
 
+  const campoSalario = form.elements.salario;
+  if (campoSalario) {
+    campoSalario.addEventListener('blur', () => atualizarAlertaSalarioMinimo(form));
+    campoSalario.addEventListener('input', () => {
+      const alerta = form.querySelector('[data-alerta-salario-minimo]');
+      if (alerta && !alerta.hidden) atualizarAlertaSalarioMinimo(form);
+    });
+  }
+
   if (tipo === 'custo') {
     atualizarCamposCusto(form);
     form.elements.regime.addEventListener('change', () => atualizarCamposCusto(form));
@@ -783,6 +806,7 @@ function prepararFormulario(form) {
 
   form.addEventListener('submit', (evento) => {
     evento.preventDefault();
+    atualizarAlertaSalarioMinimo(form);
     if (!validarFormulario(form)) return;
     if (tipo === 'custo') calcularFormularioCusto(form, resultado);
     if (tipo === 'ferias') calcularFormularioFerias(form, resultado);
@@ -794,6 +818,7 @@ function prepararFormulario(form) {
     window.setTimeout(() => {
       form.querySelectorAll('[aria-invalid]').forEach((campo) => campo.setAttribute('aria-invalid', 'false'));
       form.querySelectorAll('[data-erro-campo]').forEach((erro) => { erro.hidden = true; erro.textContent = ''; });
+      form.querySelectorAll('[data-alerta-salario-minimo]').forEach((alerta) => { alerta.hidden = true; });
       const resumo = form.querySelector('[data-calculadora-erros]');
       resumo.hidden = true;
       resultado.innerHTML = resultado._htmlInicial;

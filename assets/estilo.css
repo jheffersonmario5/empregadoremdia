@@ -989,6 +989,14 @@ tbody tr:nth-child(even) { background: color-mix(in srgb, var(--superficie-2) 55
 .campo__obrigatorio { font-weight: 400; color: var(--tinta-3); }
 .campo__dica { font-size: .83rem; color: var(--tinta-3); margin: 0; }
 .campo__erro { font-size: .83rem; color: var(--perigo); font-weight: 600; margin: 0; }
+.campo__alerta-minimo {
+  margin: .15rem 0 0; padding: .72rem .8rem;
+  border: 1px solid var(--perigo); border-left-width: 3px;
+  border-radius: 0 var(--raio-p) var(--raio-p) 0;
+  background: var(--perigo-suave); color: var(--tinta);
+  font-size: .83rem; line-height: 1.55;
+}
+.campo__alerta-minimo strong { color: var(--perigo); }
 .formulario__resumo-erros {
   border: 1px solid var(--perigo); border-left-width: 3px;
   border-radius: 0 var(--raio-p) var(--raio-p) 0;
@@ -1384,7 +1392,9 @@ tbody tr:nth-child(even) { background: color-mix(in srgb, var(--superficie-2) 55
   font-size: .84rem; color: var(--tinta-3); line-height: 1.65;
 }
 .rodape__legal p { margin: 0 0 .85rem; max-width: 92ch; }
+.rodape__assinatura { display: flex; flex-direction: column; align-items: flex-start; gap: .05rem; }
 .rodape__assinatura strong { color: var(--tinta-2); }
+.rodape__assinatura span { color: var(--tinta-3); }
 .rodape__creditos { color: var(--tinta-3); }
 .rodape__creditos a { color: inherit; text-decoration: none; }
 .rodape__creditos a:hover { color: var(--marca); text-decoration: underline; }
